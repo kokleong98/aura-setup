@@ -7,7 +7,8 @@ wget https://raw.githubusercontent.com/kokleong98/aura-setup/master/aura-deploy.
 chmod +x aura-deploy.sh
 ./aura-deploy.sh
 ```
-2. Run following to configure your staking.
+2. Login with the new user account you have setup on step 1.
+3. Run following to configure your staking.
 ```
 aura config
 ```
