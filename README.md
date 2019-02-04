@@ -16,11 +16,12 @@ chmod +x aura-deploy.sh
 ```
 aura config
 ```
+5. Fill in your cold wallet address and sign it ether wallet.
 
 # aura droplet migration
 Aura droplet migration
 
-1. Setup the new droplet as per aura staking setup above.
+1. Setup the new droplet as per aura staking setup above and complete signing new node with ether wallet.
 2. SSH to source droplet and copy ".aurad" directory recursively to new droplet using scp command. Replace <myusername> with your droplet account name and <hostip> droplet public ip address.
 ```
 scp -r ~/.aurad/ <myusername>@<hostip>:~/.aurad/
