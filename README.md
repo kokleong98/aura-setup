@@ -28,8 +28,17 @@ scp -r ~/.aurad/ <myusername>@<hostip>:~/.aurad/
 ```
 
 # aura cron staking offline monitoring setup
-1. Run following script section to create cron.bash file on account home directory.
+1. Run following script section to create cron.bash and mon_actions.sh file on account home directory.
 ```
 wget https://raw.githubusercontent.com/kokleong98/aura-setup/master/aura.bash
+wget https://raw.githubusercontent.com/kokleong98/aura-setup/master/mon_actions.sh
 ```
-2. Setup a recurring cron job to check log status. 
+2. Setup a recurring cron job to check log status every 5-10 minutes. 
+3. Add the following line to your first line of the "crontab -e" command.
+```
+SHELL=/home/username/cron.bash
+```
+4. Add the line below to run on every 5 minutes. Replace <myusername> with your droplet account name.
+```
+*/5 * * * * /home/<myusername>/mon_actions.sh
+```
