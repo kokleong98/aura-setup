@@ -28,4 +28,8 @@ scp -r ~/.aurad/ <myusername>@<hostip>:~/.aurad/
 ```
 
 # aura cron staking offline monitoring setup
-1. Run following script section to create cron.bash file.
+1. Run following script section to create cron.bash file on account home directory.
+```
+wget https://raw.githubusercontent.com/kokleong98/aura-setup/master/aura.bash
+```
+2. Setup a recurring cron job to check log status. 
