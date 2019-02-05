@@ -36,7 +36,7 @@ wget https://raw.githubusercontent.com/kokleong98/aura-setup/master/mon_actions.
 2. Setup a recurring cron job to check log status every 5-10 minutes. 
 3. Add the following line to your first line of the "crontab -e" command.
 ```
-SHELL=/home/username/cron.bash
+SHELL=/home/<myusername>/cron.bash
 ```
 4. Add the line below to run on every 5 minutes. Replace <myusername> with your droplet account name.
 ```
