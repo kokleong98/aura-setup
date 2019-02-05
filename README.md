@@ -26,3 +26,6 @@ Aura droplet migration
 ```
 scp -r ~/.aurad/ <myusername>@<hostip>:~/.aurad/
 ```
+
+# aura cron staking offline setup
+1. Run following script section to create cron.bash file.
