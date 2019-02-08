@@ -21,7 +21,7 @@ aura config
 # aura droplet migration
 Aura droplet migration
 
-1. Setup the new droplet as per aura staking setup above and complete signing new node with ether wallet.
+1. Setup the new droplet as per aura staking setup above and without signing new node with ether wallet.
 2. Stop source droplet aura services.
 ```
 aura stop
