@@ -43,3 +43,15 @@ SHELL=/home/<myusername>/cron.bash
 ```
 */5 * * * * /home/<myusername>/mon_actions.sh
 ```
+
+# add email notification on staking offline restart
+1. Complete setup on "aura cron staking offline monitoring setup" above.
+2. Setup mail relay server using the guide.
+https://www.linode.com/docs/email/postfix/configure-postfix-to-send-mail-using-gmail-and-google-apps-on-debian-or-ubuntu/
+3. Edit following internal parameters in "mon_actions.sh" file.
+```
+sendmail=1
+mail_to="your@email.com"
+mail_message="custom email content"
+mail_subject="custom email subject"
+```
