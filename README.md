@@ -32,6 +32,7 @@ scp -r ~/.aurad/ <myusername>@<hostip>:~/.aurad/
 ```
 wget https://raw.githubusercontent.com/kokleong98/aura-setup/master/aura.bash
 wget https://raw.githubusercontent.com/kokleong98/aura-setup/master/mon_actions.sh
+chmod +x aura.bash mon_actions.sh
 ```
 2. Setup a recurring cron job to check log status every 5-10 minutes. 
 3. Add the following line to your first line of the "crontab -e" command.
