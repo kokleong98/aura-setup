@@ -59,3 +59,10 @@ mail_to="your@email.com"
 mail_message="custom email content"
 mail_subject="custom email subject"
 ```
+
+# migrate staking wallet only
+1. Setup the new droplet as per aura staking setup above and without signing new node with ether wallet.
+2. SSH to source droplet and copy ".aurad/ipc" directory recursively to new droplet using scp command. Replace <myusername> with your droplet account name and <hostip> droplet public ip address.
+```
+scp -r ~/.aurad/ipc <myusername>@<hostip>:~/.aurad/ipc
+```
