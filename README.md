@@ -16,7 +16,7 @@ chmod +x aura-deploy.sh
 ```
 aura config
 ```
-5. Fill in your cold wallet address and sign it ether wallet.
+5. Fill in your cold wallet address and sign it with ether wallet.
 
 # aura droplet migration
 Aura droplet migration
