@@ -18,6 +18,16 @@ aura config
 ```
 4. Fill in your cold wallet address and sign it with ether wallet.
 
+# aura systemd service setup
+Install aura as systemd service auto run aura at system reboot. This have depedency on nvm.
+
+1. Run following script section to install aurad service and key in username setup during aura-setup.
+```
+wget https://raw.githubusercontent.com/kokleong98/aura-setup/master/aura-service-install.sh 
+chmod +x aura-service-install.sh
+sudo ./aura-service-install.sh
+```
+
 # aura droplet migration
 Aura droplet migration
 
