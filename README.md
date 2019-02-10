@@ -1,15 +1,15 @@
+# Disclaimers
+This unofficial guide is based on my personal experience on aura staking and I am not associated with Aurora nor its associates. The provided contents comes with no warranty. You may freely use and modify the software according on your needs.
+
+
 # aura-setup
 Aura staking setup
 
-1. Make sure you are in root interactive mode.
-```
-sudo -i
-```
-2. Run following script section to install aurad and dependencies. 
+1. Run following script section to install aurad and dependencies. 
 ```shell
 wget https://raw.githubusercontent.com/kokleong98/aura-setup/master/aura-deploy.sh 
 chmod +x aura-deploy.sh
-./aura-deploy.sh
+sudo ./aura-deploy.sh
 ```
 3. Login with the new user account you have setup on step 2.
 4. Run following to configure your staking.
