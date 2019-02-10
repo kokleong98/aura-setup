@@ -1,5 +1,5 @@
 # Disclaimers
-This unofficial guide is based on my personal experience on aura staking and I am not associated with Aurora nor its associates. The provided contents comes with no warranty. You may freely use and modify the software according on your needs.
+This unofficial guide is based on my personal experience on aura staking and I am not associated with Aurora nor its associates. The provided contents comes with no warranty. You may freely use and modify the software according to your needs.
 
 
 # aura-setup
