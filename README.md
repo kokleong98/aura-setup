@@ -11,12 +11,12 @@ wget https://raw.githubusercontent.com/kokleong98/aura-setup/master/aura-deploy.
 chmod +x aura-deploy.sh
 sudo ./aura-deploy.sh
 ```
-3. Login with the new user account you have setup on step 2.
-4. Run following to configure your staking.
+2. Login with the new user account you have setup on step 2.
+3. Run following to configure your staking.
 ```
 aura config
 ```
-5. Fill in your cold wallet address and sign it with ether wallet.
+4. Fill in your cold wallet address and sign it with ether wallet.
 
 # aura droplet migration
 Aura droplet migration
