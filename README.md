@@ -27,6 +27,7 @@ wget https://raw.githubusercontent.com/kokleong98/aura-setup/master/aura-service
 chmod +x aura-service-install.sh
 sudo ./aura-service-install.sh
 ```
+You shall see 2 service shell script files created and 1 systemd aura service created.
 
 # aura droplet migration
 Aura droplet migration
