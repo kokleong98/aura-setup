@@ -11,7 +11,7 @@ offline_count=10
 test=$(aura logs | grep STAKING | tail -n $offline_count  | grep OFFLINE -c)
 if [ $test -eq $offline_count ]
 then
-  if [ sendmail -eq 1 ]
+  if [ $sendmail -eq 1 ]
   then
     echo $mail_message | mail -s $mail_message $mail_to
   fi
