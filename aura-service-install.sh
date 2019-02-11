@@ -34,6 +34,7 @@ source /home/$username/.nvm/nvm.sh
 aura start
 sysminutes=\$((\$(date +"%M")))
 interval=5
+lastminutes=-1
 sendmail=0
 mail_subject="AURA STAKING OFFLINE."
 mail_message="AURA STAKING OFFLINE."
@@ -46,8 +47,9 @@ do
     echo "container not running.."
     exit 0
   else
-    if [[ \$((\$sysminutes % \$interval)) -eq 0 ]]; then
+    if [ \$((\$sysminutes % \$interval)) -eq 0 ] && [ \$lastminutes -ne \$sysminutes ]; then
       echo "container running.."
+      lastminutes=\$sysminutes
 
       test=\$(aura status | grep "Staking: offline" -c)
       if [ \$test -eq 1 ]; then
