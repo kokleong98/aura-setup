@@ -50,8 +50,8 @@ do
       echo "container running.."
 
       test=\$(aura status | grep "Staking: offline" -c)
-      if [ \$test -eq 1 ] then
-        if [ \$sendmail -eq 1 ] then
+      if [ \$test -eq 1 ]; then
+        if [ \$sendmail -eq 1 ]; then
           echo \$mail_message | mail -s \$mail_message \$mail_to
         fi
       fi
