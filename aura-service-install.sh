@@ -65,7 +65,7 @@ sudo chmod +x aura-start.sh
 
 cat > aura-stop.sh << EOF
 #!/bin/bash
-source /home/kokleong/.nvm/nvm.sh
+source /home/$username/.nvm/nvm.sh
 aura stop
 EOF
 
