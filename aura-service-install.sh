@@ -35,11 +35,11 @@ aura start
 
 while :
 do
-  if [[ \$(docker ps --format "{{.Image}}"  --filter status=running | grep -c auroradao/aurad) -eq 1 ]]; then
-    echo "container running.."
-  else
+  if [[ \$(docker ps --format "{{.Image}}"  --filter status=running | grep -c auroradao/aurad) -eq 0 ]]; then
     echo "container not running.."
     exit 0
+  else
+    echo "container running.."
   fi
   sleep 30;
 done
