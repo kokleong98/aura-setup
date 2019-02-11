@@ -48,11 +48,10 @@ do
     exit 0
   else
     if [ \$((\$sysminutes % \$interval)) -eq 0 ] && [ \$lastminutes -ne \$sysminutes ]; then
-      echo "container running.."
       lastminutes=\$sysminutes
-
       test=\$(aura status | grep "Staking: offline" -c)
       if [ \$test -eq 1 ]; then
+        echo "staking offline."
         if [ \$sendmail -eq 1 ]; then
           echo \$mail_message | mail -s \$mail_message \$mail_to
         fi
