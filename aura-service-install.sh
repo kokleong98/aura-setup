@@ -47,7 +47,7 @@ do
   sysminutes=\$((\$(date +"%M")))
   if [[ \$(docker ps --format "{{.Image}}"  --filter status=running | grep -c auroradao/aurad) -eq 0 ]]; then
     echo "container not running.."
-    exit 0
+    exit 1
   else
     if [ \$((\$sysminutes % \$interval)) -eq 0 ] && [ \$lastminutes -ne \$sysminutes ]; then
       lastminutes=\$sysminutes
