@@ -34,7 +34,7 @@ cat > aura-start.sh << EOF
 #!/bin/bash
 source /home/$username/.nvm/nvm.sh
 aura start
-sysminutes=\$((\$(date +"%M")))
+sysminutes=\$((\$(date +"%-M")))
 interval=5
 lastminutes=-1
 sendmail=0
@@ -44,7 +44,7 @@ mail_to="Your@email.com"
 
 while :
 do
-  sysminutes=\$((\$(date +"%M")))
+  sysminutes=\$((\$(date +"%-M")))
   if [[ \$(docker ps --format "{{.Image}}"  --filter status=running | grep -c auroradao/aurad) -eq 0 ]]; then
     echo "container not running.."
     exit 1
