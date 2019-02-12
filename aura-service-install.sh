@@ -21,8 +21,8 @@ User=$username
 WorkingDirectory=/home/$username/
 ExecStart=${DIR}/aura-start.sh
 ExecStop=${DIR}/aura-stop.sh
-#Restart=always
-#RestartSec=10s
+Restart=on-failure
+RestartSec=10s
 
 [Install]
 WantedBy=multi-user.target
