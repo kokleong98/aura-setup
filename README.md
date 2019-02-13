@@ -27,7 +27,14 @@ wget https://raw.githubusercontent.com/kokleong98/aura-setup/master/aura-service
 chmod +x aura-service-install.sh
 sudo ./aura-service-install.sh
 ```
-You shall see 2 service shell script files created and 1 systemd aura service created.
+You shall see 2 service shell script files (aura-start.sh, aura-stop.sh) created and 1 systemd aura service file (aura.service) created.
+2. You may further edit aura-start.sh to support email notification.
+```
+sendmail=1
+mail_to="your@email.com"
+mail_message="custom email content"
+mail_subject="custom email subject"
+```
 
 # aura droplet migration
 Aura droplet migration
