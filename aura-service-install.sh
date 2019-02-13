@@ -1,6 +1,7 @@
 #!/bin/bash
-# create systemd service for aurad daemon
-#
+#########################################
+# create aura systemd service scripts.
+#########################################
 
 read -p "Enter aura service account: " username
 getent passwd $username > /dev/null 2&>1
@@ -12,6 +13,9 @@ fi
 
 DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 
+#########################################
+# 1. create aura systemd service
+#########################################
 cat > aura.service << EOF
 [Unit]
 Description=aurad service
@@ -30,6 +34,9 @@ EOF
 
 sudo mv aura.service /etc/systemd/system/
 
+#########################################
+# 2. create systemd start up script.
+#########################################
 cat > aura-start.sh << EOF
 #!/bin/bash
 source /home/$username/.nvm/nvm.sh
@@ -66,6 +73,9 @@ EOF
 
 sudo chmod +x aura-start.sh
 
+#########################################
+# 3. create systemd stop script.
+#########################################
 cat > aura-stop.sh << EOF
 #!/bin/bash
 source /home/$username/.nvm/nvm.sh
@@ -74,5 +84,8 @@ EOF
 
 sudo chmod +x aura-stop.sh
 
+#########################################
+# 4. enable and reload systemd settings.
+#########################################
 sudo systemctl daemon-reload
 sudo systemctl enable aura.service
