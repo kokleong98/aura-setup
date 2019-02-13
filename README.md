@@ -19,7 +19,7 @@ aura config
 4. Fill in your cold wallet address and sign it with ether wallet.
 
 # aura systemd service setup
-Install aura as systemd service auto run aura at system reboot. This have depedency on nvm.
+Install aura as systemd service auto run aura at system reboot. This have depedency on nvm. The service include auto restart on failure and send email notification when staking offline (disabled by default, need configuration on aura-start.sh).
 
 1. Run following script section to install aurad service and key in username setup during aura-setup.
 ```
