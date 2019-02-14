@@ -42,9 +42,14 @@ cat > aura-start.sh << EOF
 source /home/$username/.nvm/nvm.sh
 aura start
 sysminutes=\$((\$(date +"%-M")))
-interval=5
+interval=1
+off_restart=3
+off_cool=10
+off_count=0
+off_count_cool=0
 lastminutes=-1
 sendmail=0
+
 mail_subject="AURA STAKING OFFLINE."
 mail_message="AURA STAKING OFFLINE."
 mail_to="Your@email.com"
@@ -60,10 +65,24 @@ do
       lastminutes=\$sysminutes
       test=\$(aura status | grep "Staking: offline" -c)
       if [ \$test -eq 1 ]; then
-        echo "staking offline."
+        if [ \$off_count_cool -eq 0 ]; then
+          off_count=\$((off_count+1))
+          echo "Staking offline. Fail: \$off_count / \$off_restart."
+          if [ \$off_count -eq \$off_restart ]; then
+            echo "Restarting aura..."
+            off_count=0
+            off_count_cool=\$off_cool
+            aura restart
+          fi
+        else
+          off_count_cool=\$((off_count_cool - 1)) 
+          echo "staking offline. Restart cooling period \$((off_cool - off_count_cool)) / \$off_cool."
+        fi
         if [ \$sendmail -eq 1 ]; then
           echo \$mail_message | mail -s \$mail_message \$mail_to
         fi
+      else
+        off_count=0
       fi
     fi
   fi
