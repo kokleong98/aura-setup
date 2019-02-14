@@ -18,7 +18,7 @@ DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 #########################################
 cat > aura.service << EOF
 [Unit]
-Description=aurad service
+Description=aurad monitoring service
 
 [Service]
 User=$username
