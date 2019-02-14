@@ -82,7 +82,7 @@ do
           echo \$mail_message | mail -s \$mail_message \$mail_to
         fi
       else
-        if [ \$(aura status | grep "Staking: online" -c) -eq 1]; then
+        if [[ \$(aura status | grep "Staking: online" -c) -eq 1 ]]; then
           echo "staking is online..."
         fi
         off_count=0
