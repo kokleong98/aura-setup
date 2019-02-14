@@ -111,3 +111,4 @@ sudo chmod +x aura-stop.sh
 #########################################
 sudo systemctl daemon-reload
 sudo systemctl enable aura.service
+
