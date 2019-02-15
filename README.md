@@ -32,7 +32,7 @@ chmod +x aura-service-install.sh
 sudo ./aura-service-install.sh
 ```
 You shall see 2 service shell script files (aura-start.sh, aura-stop.sh) created and 1 systemd aura service file (aura.service) created.
-2. You may further edit aura-start.sh to support email notification. You MUST to setup mail relay server using the following guide to make mail notification work else keep setting as sendmail=0.
+2. You may further edit aura-start.sh to support email notification. You MUST setup mail relay server using the following guide to make mail notification work else keep setting as sendmail=0.
 https://www.linode.com/docs/email/postfix/configure-postfix-to-send-mail-using-gmail-and-google-apps-on-debian-or-ubuntu/
 ```
 sendmail=1
