@@ -57,7 +57,7 @@ mail_to="Your@email.com"
 while :
 do
   sysminutes=\$((\$(date +"%-M")))
-  if [[ \$(docker ps --format "{{.Name}}"  --filter status=running | grep -c "docker_aurad_1\|docker_parity_1\|docker_mysql_1") -lt 3 ]]; then
+  if [[ \$(docker ps --format "{{.Names}}"  --filter status=running | grep -c "docker_aurad_1\|docker_parity_1\|docker_mysql_1") -lt 3 ]]; then
     echo "container not running.."
     exit 1
   else
