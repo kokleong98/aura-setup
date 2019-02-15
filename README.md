@@ -40,7 +40,7 @@ mail_to="your@email.com"
 mail_message="custom email content"
 mail_subject="custom email subject"
 ```
-3. Upon finish generating and adjusting your aura-start.sh script. Running following command to start your aura monitoring service.
+3. Upon finish aurad sync and adjusting your aura-start.sh script. Running following command to start your aura monitoring service.
 ```
 sudo systemctl start aura.service
 ```
