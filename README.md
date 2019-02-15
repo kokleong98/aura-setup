@@ -21,7 +21,7 @@ aura config
 # aura systemd service setup
 Install aura as systemd service auto run aura at system reboot. This have depedency on nvm. The service include following functionality.
 - Monitoring staking offline and auto restart aura.
-- Auto restart on system reboot and aura.service failures. 
+- Auto aura start on system reboot and aura.service failures. 
 - Email notification when staking offline (disabled by default, need configuration on aura-start.sh).
 
 Make sure you have finished sync with the network before starting aura.service else it will restart aura because staking is offline.
