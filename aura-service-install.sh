@@ -74,10 +74,8 @@ do
             off_count_cool=\$off_cool
             aura restart
           fi
-        else
-          off_count_cool=\$((off_count_cool - 1)) 
-          echo "staking offline. Restart cooling period \$((off_cool - off_count_cool)) / \$off_cool."
         fi
+        echo "staking offline."
         if [ \$sendmail -eq 1 ]; then
           echo \$mail_message | mail -s \$mail_message \$mail_to
         fi
@@ -87,6 +85,12 @@ do
         fi
         off_count=0
       fi
+
+      if [ \$off_count_cool -ge 1 ]; then
+        off_count_cool=\$((off_count_cool - 1)) 
+        echo "Restart cooling period \$((off_cool - off_count_cool)) / \$off_cool."
+      fi
+
     fi
   fi
   sleep 30;
@@ -111,4 +115,3 @@ sudo chmod +x aura-stop.sh
 #########################################
 sudo systemctl daemon-reload
 sudo systemctl enable aura.service
-
