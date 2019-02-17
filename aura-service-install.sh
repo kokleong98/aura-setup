@@ -74,8 +74,9 @@ do
             off_count_cool=\$off_cool
             aura restart
           fi
+        else
+          echo "staking offline."
         fi
-        echo "staking offline."
         if [ \$sendmail -eq 1 ]; then
           echo \$mail_message | mail -s \$mail_message \$mail_to
         fi
