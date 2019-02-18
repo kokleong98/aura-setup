@@ -26,7 +26,7 @@ Install aura as systemd service auto run aura at system reboot. This have depede
 
 ## Basic aura systemd service setup (Without email notification)
 Make sure you have finished sync with the network before starting aura.service else it will restart aura because staking is offline.
-1. Run following script section to install aurad service and key in username setup during aura-setup.
+1. Run following script section to install aurad service and key in username setup during aura-setup. *You may be prompt for sudo password.
 ```
 wget https://raw.githubusercontent.com/kokleong98/aura-setup/master/aura-service-install.sh 
 chmod +x aura-service-install.sh
