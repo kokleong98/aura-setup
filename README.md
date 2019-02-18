@@ -24,7 +24,7 @@ Install aura as systemd service auto run aura at system reboot. This have depede
 - Auto aura start on system reboot and aura.service failures. 
 - Email notification when staking offline (disabled by default, need configuration on aura-start.sh).
 
-## Basic (Without email notification)
+## Basic aura systemd service setup (Without email notification)
 Make sure you have finished sync with the network before starting aura.service else it will restart aura because staking is offline.
 1. Run following script section to install aurad service and key in username setup during aura-setup.
 ```
@@ -37,7 +37,7 @@ You shall see 2 service shell script files (aura-start.sh, aura-stop.sh) created
 ```
 sudo systemctl start aura.service
 ```
-## Advance (With email notification)
+## Advanced aura systemd service setup (With email notification)
 1. Run following script section to install aurad service and key in username setup during aura-setup.
 ```
 wget https://raw.githubusercontent.com/kokleong98/aura-setup/master/aura-service-install.sh 
