@@ -33,7 +33,7 @@ chmod +x aura-service-install.sh
 sudo ./aura-service-install.sh
 ```
 You shall see 2 service shell script files (aura-start.sh, aura-stop.sh) created and 1 systemd aura service file (aura.service) created.
-2. Upon finish aurad sync and adjusting your aura-start.sh script. Running following command to start your aura monitoring service.
+2. Upon finish aurad sync. Running following command to start your aura monitoring service.
 ```
 sudo systemctl start aura.service
 ```
