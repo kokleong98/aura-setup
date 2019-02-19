@@ -37,10 +37,17 @@ sudo mv aura.service /etc/systemd/system/
 #########################################
 # 2. create systemd start up script.
 #########################################
+aura_start_option=""
+read -p "Using https://infura.io? (y/n): " infuraoption
+if [ $infuraoption -eq "y" ]; then
+  read -p "Enter infura.io endpoint: " infuraurl
+  aura_start_option="--rpc $infuraurl"
+fi
+
 cat > aura-start.sh << EOF
 #!/bin/bash
 source /home/$username/.nvm/nvm.sh
-aura start
+aura start $aura_start_option
 sysminutes=\$((\$(date +"%-M")))
 interval=1
 off_restart=3
@@ -72,7 +79,7 @@ do
             echo "Restarting aura..."
             off_count=0
             off_count_cool=\$off_cool
-            aura restart
+            aura restart $aura_start_option
           fi
         else
           echo "staking offline."
