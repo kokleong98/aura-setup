@@ -91,7 +91,7 @@ do
           echo "staking offline."
         fi
         if [ \$sendmail -eq 1 ]; then
-          echo \$mail_message | mail -s \$mail_message \$mail_to
+          echo "\$mail_message" | mail -s "\$mail_subject" "\$mail_to"
         fi
       else
         if [ \$off_count -ge 1 ] && [[ \$(aura status | grep "Staking: online" -c) -eq 1 ]]; then
