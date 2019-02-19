@@ -7,7 +7,7 @@ Aura staking setup
 
 1. Run following script section to install aurad and dependencies. 
 ```shell
-wget https://raw.githubusercontent.com/kokleong98/aura-setup/master/aura-deploy.sh 
+curl -O https://raw.githubusercontent.com/kokleong98/aura-setup/master/aura-deploy.sh 
 chmod +x aura-deploy.sh
 sudo ./aura-deploy.sh
 ```
@@ -28,7 +28,7 @@ Install aura as systemd service auto run aura at system reboot. This have depede
 Make sure you have finished sync with the network before starting aura.service else it will restart aura because staking is offline.
 1. Run following script section to install aurad service and key in username setup during aura-setup. *You may be prompt for sudo password.
 ```
-wget https://raw.githubusercontent.com/kokleong98/aura-setup/master/aura-service-install.sh 
+curl -O https://raw.githubusercontent.com/kokleong98/aura-setup/master/aura-service-install.sh 
 chmod +x aura-service-install.sh
 sudo ./aura-service-install.sh
 ```
@@ -41,7 +41,7 @@ sudo systemctl start aura.service
 ## Advanced aura systemd service setup (With email notification)
 1. Run following script section to install aurad service and key in username setup during aura-setup.
 ```
-wget https://raw.githubusercontent.com/kokleong98/aura-setup/master/aura-service-install.sh 
+curl -O https://raw.githubusercontent.com/kokleong98/aura-setup/master/aura-service-install.sh 
 chmod +x aura-service-install.sh
 sudo ./aura-service-install.sh
 ```
@@ -74,8 +74,8 @@ scp -r ~/.aurad/ <myusername>@<hostip>:~
 # aura cron staking offline monitoring setup
 1. Run following script section to create cron.bash and mon_actions.sh file on account home directory.
 ```
-wget https://raw.githubusercontent.com/kokleong98/aura-setup/master/aura.bash
-wget https://raw.githubusercontent.com/kokleong98/aura-setup/master/mon_actions.sh
+curl -O https://raw.githubusercontent.com/kokleong98/aura-setup/master/aura.bash
+curl -O https://raw.githubusercontent.com/kokleong98/aura-setup/master/mon_actions.sh
 chmod +x aura.bash mon_actions.sh
 ```
 2. Setup a recurring cron job to check log status every 5-10 minutes. 
