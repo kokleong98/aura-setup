@@ -79,7 +79,8 @@ do
             echo "Restarting aura..."
             off_count=0
             off_count_cool=\$off_cool
-            aura restart $aura_start_option
+            aura stop
+            aura start $aura_start_option
           fi
         else
           echo "staking offline."
