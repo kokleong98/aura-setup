@@ -42,11 +42,11 @@ read -p "Using https://infura.io? (y/n): " infuraoption
 if [ "$infuraoption" == "y" ]; then
   read -p "Enter infura.io endpoint: " infuraurl
   aura_start_option="--rpc $infuraurl"
-  monitor_services="docker_aurad_1\|docker_parity_1\|docker_mysql_1"
-  monitor_services_count=3
-else
   monitor_services="docker_aurad_1\|docker_mysql_1"
   monitor_services_count=2
+else
+  monitor_services="docker_aurad_1\|docker_parity_1\|docker_mysql_1"
+  monitor_services_count=3
 fi
 
 cat > aura-start.sh << EOF
