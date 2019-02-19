@@ -37,7 +37,7 @@ sudo mv aura.service /etc/systemd/system/
 #########################################
 # 2. create systemd start up script.
 #########################################
-aura_start_option=""
+aura_start_option="--rpc http://localhost:8545"
 read -p "Using https://infura.io? (y/n): " infuraoption
 if [ "$infuraoption" == "y" ]; then
   read -p "Enter infura.io endpoint: " infuraurl
