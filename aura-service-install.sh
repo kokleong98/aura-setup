@@ -39,7 +39,7 @@ sudo mv aura.service /etc/systemd/system/
 #########################################
 aura_start_option=""
 read -p "Using https://infura.io? (y/n): " infuraoption
-if [ $infuraoption -eq "y" ]; then
+if [ "$infuraoption" == "y" ]; then
   read -p "Enter infura.io endpoint: " infuraurl
   aura_start_option="--rpc $infuraurl"
 fi
