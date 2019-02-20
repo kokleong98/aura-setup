@@ -37,7 +37,7 @@ sudo mv aura.service /etc/systemd/system/
 #########################################
 # 2. create systemd start up script.
 #########################################
-aura_start_option="--rpc http://localhost:8545"
+aura_start_option=""
 read -p "Using https://infura.io? (y/n): " infuraoption
 if [ "$infuraoption" == "y" ]; then
   read -p "Enter infura.io endpoint: " infuraurl
@@ -70,13 +70,10 @@ checkEthBlockNumber()
   return 0
 }
 
-checkEthBlockNumber
-
-if [ \$? -ne 0 ]; then
-  echo "error"
-else
-  echo "Current ETH block=\$blocknum"
-fi
+checkAuradProcessingBlock()
+{
+  processingblock=\$(aura logs -n aurad | grep 'Processing blocks' | tail -n 1 | cut -d '|' -f3 | cut -d ' ' -f6)
+}
 
 source /home/$username/.nvm/nvm.sh
 aura start $aura_start_option
@@ -92,6 +89,24 @@ sendmail=0
 mail_subject="AURA STAKING OFFLINE."
 mail_message="AURA STAKING OFFLINE."
 mail_to="Your@email.com"
+
+##wait sync block differences less than 6 blocks
+while :
+do
+  checkEthBlockNumber
+  if [ \$? -ne 0 ]; then
+    echo "error"
+  else
+    checkAuradProcessingBlock
+    if [ ! -z "\$processingblock" ]; then
+      echo "Current block=\$blocknum / \$processingblock"
+      if [ $((blocknum - processingblock)) -lt 6 ]; then
+        break
+      fi
+    fi
+  fi
+  sleep 20
+done
 
 while :
 do
