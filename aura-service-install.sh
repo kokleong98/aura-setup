@@ -100,7 +100,7 @@ do
     checkAuradProcessingBlock
     if [ ! -z "\$processingblock" ]; then
       echo "Current block=\$blocknum / \$processingblock"
-      if [ $((blocknum - processingblock)) -lt 6 ]; then
+      if [ \$((blocknum - processingblock)) -lt 6 ]; then
         break
       fi
     fi
