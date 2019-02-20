@@ -51,6 +51,33 @@ fi
 
 cat > aura-start.sh << EOF
 #!/bin/bash
+
+parseEthBlockNumber()
+{
+  blocknum=\$((16#$(echo \${1:1:-1} | cut -d '"' -f10 | sed 's/0x//g')))
+}
+
+checkEthBlockNumber()
+{
+  jresult=\$(curl -s "https://api.etherscan.io/api?module=proxy&action=eth_blockNumber&apikey=YourApiKeyToken")
+  if [ \$? -ne 0 ]; then
+    return 1
+  fi
+  parseEthBlockNumber \$jresult
+  if [ \$? -ne 0 ]; then
+    return 2
+  fi
+  return 0
+}
+
+checkEthBlockNumber
+
+if [ \$? -ne 0 ]; then
+  echo "error"
+else
+  echo "Current ETH block=\$blocknum"
+fi
+
 source /home/$username/.nvm/nvm.sh
 aura start $aura_start_option
 sysminutes=\$((\$(date +"%-M")))
