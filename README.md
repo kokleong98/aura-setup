@@ -11,7 +11,7 @@ curl -O https://raw.githubusercontent.com/kokleong98/aura-setup/master/aura-depl
 chmod +x aura-deploy.sh
 sudo ./aura-deploy.sh
 ```
-2. Login with the new user account you have setup on step 2.
+2. Login with the new user account you have setup on step 1.
 3. Run following to configure your staking.
 ```
 aura config
