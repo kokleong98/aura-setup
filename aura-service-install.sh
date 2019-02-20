@@ -54,7 +54,7 @@ cat > aura-start.sh << EOF
 
 parseEthBlockNumber()
 {
-  blocknum=\$((16#$(echo \${1:1:-1} | cut -d '"' -f10 | sed 's/0x//g')))
+  blocknum=\$((16#\$(echo \${1:1:-1} | cut -d '"' -f10 | sed 's/0x//g')))
 }
 
 checkEthBlockNumber()
