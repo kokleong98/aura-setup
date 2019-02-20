@@ -99,7 +99,7 @@ do
   else
     checkAuradProcessingBlock
     if [ ! -z "\$processingblock" ]; then
-      echo "Current block=\$blocknum / \$processingblock"
+      echo "Waiting block sync (\$processingblock/\$blocknum)"
       if [[ \$((blocknum - processingblock)) -lt 6 ]]; then
         break
       fi
