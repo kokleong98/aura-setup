@@ -105,6 +105,7 @@ checkAuradProcessingBlock()
 
 waitAuradBlockSync()
 {
+  lastblocknum=0
   while :
   do
     checkEthBlockNumber
