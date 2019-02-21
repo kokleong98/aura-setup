@@ -51,6 +51,7 @@ fi
 
 cat > aura-start.sh << EOF
 #!/bin/bash
+source /home/$username/.nvm/nvm.sh
 
 initConfiguration()
 {
@@ -126,8 +127,6 @@ checkAuradPackageVersion()
   fi
   last_pkg_version=\$pkg_version
 }
-
-source /home/$username/.nvm/nvm.sh
 
 initConfiguration
 checkAuradPackageVersion
