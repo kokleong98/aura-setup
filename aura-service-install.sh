@@ -117,6 +117,11 @@ waitAuradBlockSync()
         fi
       fi
     fi
+    if [ \$lastblocknum -eq \$blocknum ]; then
+      echo "Restarting aurad cointainer."
+      docker restart docker_aurad_1
+    fi
+    lastblocknum=\$blocknum
     sleep 20
   done
 }
