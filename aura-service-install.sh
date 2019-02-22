@@ -125,6 +125,8 @@ waitAuradBlockSync()
     lastblocknum=\$processingblock
     sleep 20
   done
+  #Extra wait time for aurad container to active running
+  sleep 30
 }
 
 checkAuradPackageVersion()
