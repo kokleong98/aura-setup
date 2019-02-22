@@ -25,6 +25,7 @@ Install aura as systemd service auto run aura at system reboot. This have depede
 - Email notification when staking offline (disabled by default, need configuration on aura-start.sh).
 - Aurad block sync wait at aura.service start-up.
 - Aurad software update email notification. (Untested)
+- **Staking online statistics? (I'm not sure whether want to implement this because a bit outside the scope and add stress to the node)
 
 ## Basic aura systemd service setup (Without email notification)
 Make sure you have finished sync with the network before starting aura.service else it will restart aura because staking is offline.
