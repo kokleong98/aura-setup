@@ -53,22 +53,27 @@ cat > aura-start.sh << EOF
 #!/bin/bash
 source /home/$username/.nvm/nvm.sh
 
+if [ -f "aura.conf" ]; then
+  source aura.conf
+  echo "Loading aura.conf settings."
+fi
+
 initConfiguration()
 {
   #check interval
-  interval=1
+  [ -z "\$interval" ] && interval=1
   #staking offline count before restart aurad
-  off_restart=3
+  [ -z "\$off_restart" ] && off_restart=3
   #staking offline cooling period after restart aurad
-  off_cool=10
+  [ -z "\$off_cool" ] && off_cool=10
   #send mail on staking offline option
-  sendmail=0
+  [ -z "\$sendmail" ] && sendmail=0
   #send mail on staking offline mail options
-  mail_subject="AURA STAKING OFFLINE."
-  mail_message="AURA STAKING OFFLINE."
-  mail_to="Your@email.com"
+  [ -z "\$mail_subject" ] && mail_subject="AURA STAKING OFFLINE."
+  [ -z "\$mail_message" ] && mail_message="AURA STAKING OFFLINE."
+  [ -z "\$mail_to" ] && mail_to="your@email.com"
   #aurad update notification option
-  update_notify=0
+  [ -z "\$update_notify" ] && update_notify=1
 }
 
 initVariables()
