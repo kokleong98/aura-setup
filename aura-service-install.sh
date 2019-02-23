@@ -73,7 +73,7 @@ initConfiguration()
   [ -z "\$mail_message" ] && mail_message="AURA STAKING OFFLINE."
   [ -z "\$mail_to" ] && mail_to="your@email.com"
   #aurad update notification option
-  [ -z "\$update_notify" ] && update_notify=1
+  [ -z "\$update_notify" ] && update_notify=0
 }
 
 initVariables()
