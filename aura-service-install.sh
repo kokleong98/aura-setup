@@ -74,6 +74,9 @@ initConfiguration()
   [ -z "\$mail_to" ] && mail_to="your@email.com"
   #aurad update notification option
   [ -z "\$update_notify" ] && update_notify=0
+  #external ethereum node option
+  [ -z "\$rpc_option" ] && rpc_option=0
+  [ -z "\$rpc_url" ] && rpc_url=""
 }
 
 initVariables()
@@ -84,6 +87,13 @@ initVariables()
   lastminutes=-1
   latest_pkg_version=""
   logs_aurad=""
+  if [ \$rpc_option -eq 1 ] && [ ! -z "\$rpc_url" ]; then
+    services_count=2
+    services_names="docker_aurad_1\|docker_mysql_1"
+  else
+    services_count=3
+    services_names="docker_aurad_1\|docker_parity_1\|docker_mysql_1"
+  fi
 }
 
 fetchAuradLogs()
@@ -173,10 +183,30 @@ checkAuradPackageVersion()
   fi
 }
 
+startAura()
+{
+  if [ \$rpc_option -eq 1 ] && [ ! -z "\$rpc_url" ]; then
+    aura start $aura_start_option
+  else
+    aura start
+  fi
+}
+
+stopAura()
+{
+  aura stop
+}
+
+restartAura()
+{
+  stopAura
+  startAura
+}
+
 initConfiguration
-checkAuradPackageVersion
-aura start $aura_start_option
 initVariables
+checkAuradPackageVersion
+startAura
 waitAuradSnapshotSync
 ##wait sync block differences less than 6 blocks
 waitAuradBlockSync
@@ -204,8 +234,7 @@ do
             echo "Restarting aura..."
             off_count=0
             off_count_cool=\$off_cool
-            aura stop
-            aura start $aura_start_option
+            restartAura
           fi
         else
           echo "staking offline."
