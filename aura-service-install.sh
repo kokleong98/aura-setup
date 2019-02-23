@@ -136,14 +136,14 @@ waitAuradBlockSync()
 
 checkAuradPackageVersion()
 {
-  pkg_version=\$(npm dist-tag ls @auroradao/aurad-cli | cut -d ' ' -f2)
-  if [ ! -z "\$last_pkg_version" ] && [ "\$last_pkg_version" != "\$pkg_version" ]; then
-    echo "New aurad package available (\$pkg_version)."
+  current_pkg_version=\$(npm ls -g  @auroradao/aurad-cli | grep "@auroradao.aurad-cli" | cut -d '@' -f3)
+  latest_pkg_version=\$(npm dist-tag ls @auroradao/aurad-cli | cut -d ' ' -f2)
+  if [ ! -z "\$latest_pkg_version" ] && [ ! -z "\$current_pkg_version" ] && [ "\$current_pkg_version" != "\$latest_pkg_version" ]; then
+    echo "New aurad package available (\$latest_pkg_version)."
     if [ \$update_notify -eq 1 ]; then
-      echo "Software update version: \$pkg_version" | mail -s "Software update" "\$mail_to"
+      echo "Software update version: \$latest_pkg_version" | mail -s "Software update" "\$mail_to"
     fi
   fi
-  last_pkg_version=\$pkg_version
 }
 
 initConfiguration
