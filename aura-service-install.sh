@@ -147,6 +147,7 @@ checkEthBlockNumber()
 waitAuradBlockSync()
 {
   lastblocknum=0
+  stuck_count=0
   while :
   do
     checkEthBlockNumber
@@ -161,11 +162,16 @@ waitAuradBlockSync()
       fi
     fi
     if [ ! -z "\$processingblock" ] && [ ! -z "\$lastblocknum" ]  && [ \$lastblocknum -eq \$processingblock ]; then
-      echo "Aurad container block sync stuck. Restarting aurad cointainer."
-      docker restart docker_aurad_1
+      stuck_count=\$((stuck_count+1))
+      if [ \$stuck_count -ge 3 ]; then
+        echo "Aurad container block sync stuck. Restarting aurad cointainer."
+        docker restart docker_aurad_1
+      fi
+    else
+      stuck_count=0
     fi
     lastblocknum=\$processingblock
-    sleep 30
+    sleep 50
   done
   #Extra wait time for aurad container to active running
   sleep 30
