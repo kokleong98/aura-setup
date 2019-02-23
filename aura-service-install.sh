@@ -161,7 +161,7 @@ waitAuradBlockSync()
       fi
     fi
     if [ ! -z "\$processingblock" ] && [ ! -z "\$lastblocknum" ]  && [ \$lastblocknum -eq \$processingblock ]; then
-      echo "Restarting aurad cointainer."
+      echo "Aurad container block sync stuck. Restarting aurad cointainer."
       docker restart docker_aurad_1
     fi
     lastblocknum=\$processingblock
