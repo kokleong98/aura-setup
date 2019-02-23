@@ -165,7 +165,7 @@ waitAuradBlockSync()
       docker restart docker_aurad_1
     fi
     lastblocknum=\$processingblock
-    sleep 20
+    sleep 30
   done
   #Extra wait time for aurad container to active running
   sleep 30
@@ -203,6 +203,9 @@ restartAura()
   startAura
 }
 
+#############################################################
+## Main routine area
+#############################################################
 initConfiguration
 initVariables
 checkAuradPackageVersion
