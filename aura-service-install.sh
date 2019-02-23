@@ -82,7 +82,38 @@ initVariables()
   off_count=0
   off_count_cool=0
   lastminutes=-1
-  last_pkg_version=""
+  latest_pkg_version=""
+  logs_aurad=""
+}
+
+fetchAuradLogs()
+{
+  logs_aurad=\$(aura logs -n aurad | tail -n 20)
+}
+
+checkAuradSnapshot()
+{
+  snapshot=\$(echo "\$logs_aurad" | grep 'snapshot' | tail -n 1)
+}
+
+checkAuradProcessingBlock()
+{
+  processingblock=\$(echo "\$logs_aurad" | grep 'Processing blocks' | tail -n 1 | cut -d '|' -f3 | cut -d ' ' -f6)
+}
+
+waitAuradSnapshotSync()
+{
+  while :
+  do
+    checkAuradSnapshot
+    if [ -z "$snapshot" ]; then
+      break
+    else
+      echo  "still active"
+    fi
+    sleep 10
+    fetchAuradLogs
+  done
 }
 
 parseEthBlockNumber()
@@ -103,17 +134,13 @@ checkEthBlockNumber()
   return 0
 }
 
-checkAuradProcessingBlock()
-{
-  processingblock=\$(aura logs -n aurad | grep 'Processing blocks' | tail -n 1 | cut -d '|' -f3 | cut -d ' ' -f6)
-}
-
 waitAuradBlockSync()
 {
   lastblocknum=0
   while :
   do
     checkEthBlockNumber
+    fetchAuradLogs
     if [ \$? -eq 0 ]; then
       checkAuradProcessingBlock
       if [ ! -z "\$processingblock" ]; then
@@ -123,7 +150,7 @@ waitAuradBlockSync()
         fi
       fi
     fi
-    if [ \$lastblocknum -eq \$processingblock ]; then
+    if [ ! -z "\$processingblock" ] && [ ! -z "\$lastblocknum" ]  && [ \$lastblocknum -eq \$processingblock ]; then
       echo "Restarting aurad cointainer."
       docker restart docker_aurad_1
     fi
@@ -150,6 +177,7 @@ initConfiguration
 checkAuradPackageVersion
 aura start $aura_start_option
 initVariables
+waitAuradSnapshotSync
 ##wait sync block differences less than 6 blocks
 waitAuradBlockSync
 
