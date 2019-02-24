@@ -36,7 +36,7 @@ mail_to="your@email.com"
 update_notify=0
 #external ethereum node option (1=Enabled, 0=Default,Disabled)
 rpc_option=0
-rpc_url="
+rpc_url=""
 ```
 
 # aura systemd service setup
