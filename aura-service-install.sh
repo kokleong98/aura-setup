@@ -166,6 +166,7 @@ waitAuradBlockSync()
       if [ \$stuck_count -ge 3 ]; then
         echo "Aurad container block sync stuck. Restarting aurad cointainer."
         docker restart docker_aurad_1
+        stuck_count=0
       fi
     else
       stuck_count=0
