@@ -18,6 +18,27 @@ aura config
 ```
 4. Fill in your cold wallet address and sign it with ether wallet.
 
+# aura.conf sample configuration
+```
+#check interval minutes
+interval=1
+#staking offline count before restart aurad
+off_restart=3
+#staking offline cooling period after restart aurad
+off_cool=10
+#send mail on staking offline option (1=Enabled, 0=Default,Disabled)
+sendmail=0
+#send mail on staking offline mail options
+mail_subject="Your mail subject."
+mail_message="Your mail messsage."
+mail_to="your@email.com"
+#aurad update notification option (1=Enabled, 0=Default,Disabled)
+update_notify=0
+#external ethereum node option (1=Enabled, 0=Default,Disabled)
+rpc_option=0
+rpc_url="
+```
+
 # aura systemd service setup
 Install aura as systemd service auto run aura at system reboot. This have depedency on nvm. The service include following functionality.
 - Monitoring staking offline and auto restart aura.
