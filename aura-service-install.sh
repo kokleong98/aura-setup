@@ -227,6 +227,7 @@ waitAuradBlockSync
 
 while :
 do
+  echo "Monitoring started..."
   sysminutes=\$((\$(date +"%-M")))
   
   if [ \$((\$sysminutes % 20)) -eq 0 ]; then
