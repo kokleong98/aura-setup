@@ -47,7 +47,7 @@ if [ "$infuraoption" == "y" ]; then
   cat > aura.conf << EOF
 rpc_option=1
 rpc_url="$infuraurl"
-  EOF
+EOF
 else
   monitor_services="docker_aurad_1\|docker_parity_1\|docker_mysql_1"
   monitor_services_count=3
