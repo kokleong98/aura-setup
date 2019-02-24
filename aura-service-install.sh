@@ -44,6 +44,10 @@ if [ "$infuraoption" == "y" ]; then
   aura_start_option="--rpc $infuraurl"
   monitor_services="docker_aurad_1\|docker_mysql_1"
   monitor_services_count=2
+  cat > aura.conf << EOF
+rpc_option=1
+rpc_url="$infuraurl"
+  EOF
 else
   monitor_services="docker_aurad_1\|docker_parity_1\|docker_mysql_1"
   monitor_services_count=3
@@ -229,7 +233,7 @@ do
     checkAuradPackageVersion
   fi
   
-  if [[ \$(docker ps --format "{{.Names}}"  --filter status=running | grep -c "$monitor_services") -lt $monitor_services_count ]]; then
+  if [[ \$(docker ps --format "{{.Names}}"  --filter status=running | grep -c "\$services_names") -lt \$services_count ]]; then
     echo "container not running.."
     exit 1
   else
