@@ -48,6 +48,7 @@ Install aura as systemd service auto run aura at system reboot. This have depede
 - Auto restart aurad container when stuck during Aurad block sync stage.
 - Aurad software update email notification.
 - Support "aura.conf" configuration file.
+- **Keep overall monitor service CPU consumption max range (4% - 6%) (Trying to uphold this.)
 - **Staking online statistics? (I'm not sure whether want to implement this because a bit outside the scope and add stress to the node)
 
 ## Basic aura systemd service setup (Without email notification)
