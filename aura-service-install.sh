@@ -64,7 +64,7 @@ fi
 
 initConfiguration()
 {
-  #check interval
+  #check interval minutes (value range 1-59)
   [ -z "\$interval" ] && interval=1
   #staking offline count before restart aurad
   [ -z "\$off_restart" ] && off_restart=3
@@ -78,6 +78,8 @@ initConfiguration()
   [ -z "\$mail_to" ] && mail_to="your@email.com"
   #aurad update notification option
   [ -z "\$update_notify" ] && update_notify=0
+  #aurad update check interval (value range 1-59)
+  [ -z "\$update_check_interval" ] && update_check_interval=20
   #external ethereum node option
   [ -z "\$rpc_option" ] && rpc_option=0
   [ -z "\$rpc_url" ] && rpc_url=""
@@ -238,7 +240,7 @@ while :
 do
   sysminutes=\$((\$(date +"%-M")))
   
-  if [ \$((\$sysminutes % 20)) -eq 0 ]; then
+  if [ \$((\$sysminutes % \$update_check_interval)) -eq 0 ]; then
     checkAuradPackageVersion
   fi
   
