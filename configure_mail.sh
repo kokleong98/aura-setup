@@ -9,9 +9,9 @@ read -p "Enter mail server port (eg. 587): " smtp_port
 read -p "Enter your email (eg. username@gmail.com): " email
 while :
 do
-  echo "Enter your email password: "
+  echo -n "Enter your email password: "
   read -s password
-  echo "Enter your email password again: "
+  echo -n "Enter your email password again: "
   read -s password2
 
   if [ "$password" == "$password2" ]; then
