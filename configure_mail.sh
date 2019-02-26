@@ -13,6 +13,7 @@ while :
 do
   echo -n "Enter your email password: "
   read -s password
+  
   echo -n "Enter your email password again: "
   read -s password2
 
