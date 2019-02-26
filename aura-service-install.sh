@@ -313,9 +313,11 @@ do
           echo "\$mail_message" | mail -s "\$mail_subject" "\$mail_to"
         fi
       else
-        if [ \$off_count -ge 1 ] && [[ \$(grep "Staking: online" -c <<< "\$logs_aurad") -eq 1 ]]; then
-          echo "staking is online..."
+        if [[ \$(grep "Staking: online" -c <<< "\$logs_aurad") -eq 1 ]]; then
           stat_status=1
+          if [ \$off_count -ge 1 ]; then
+            echo "staking is online..."
+          fi
         fi
         off_count=0
       fi
