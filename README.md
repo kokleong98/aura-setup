@@ -18,6 +18,19 @@ aura config
 ```
 4. Fill in your cold wallet address and sign it with ether wallet.
 
+# configure mail service 
+1. Prepare mail server TLS settings.
+- Mail server name. (eg. smtp.gmail.com)
+- Mail server port. (eg. 587)
+- Mail account. (eg. username@gmail.com)
+- Mail account password.
+2. Run following script section to configure email. 
+```shell
+curl -O https://raw.githubusercontent.com/kokleong98/aura-setup/master/configure_mail.sh
+chmod +x configure_mail.sh
+sudo ./configure_mail.sh
+```
+
 # aura.conf sample configuration
 ```
 #check interval minutes
