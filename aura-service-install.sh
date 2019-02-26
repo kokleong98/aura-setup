@@ -186,7 +186,7 @@ waitAuradBlockSync()
     sleep 50
   done
   #Extra wait time for aurad container to active running
-  sleep 30
+  sleep 20
 }
 
 checkAuradPackageVersion()
@@ -236,7 +236,10 @@ logStatistics()
   logline="\$logline,\$(formatJson "dm" \$stat_aura_mem)"
   logline="\$logline}"
 
-  cat >> "${stat_time:0:12}00.txt" <<< "\$logline"
+  if [ ! -d "stats" ]; then
+    mkdir "stats"
+  fi
+  cat >> "stats\\\${stat_time:0:8}00.txt" <<< "\$logline"
 }
 
 startAura()
