@@ -239,7 +239,7 @@ logStatistics()
   if [ ! -d "stats" ]; then
     mkdir "stats"
   fi
-  cat >> "stats\\\\\${stat_time:0:8}00.txt" <<< "\$logline"
+  cat >> stats\\${stat_time:0:8}00.txt <<< "\$logline"
 }
 
 startAura()
