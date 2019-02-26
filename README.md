@@ -24,6 +24,11 @@ aura config
 - Mail server port. (eg. 587)
 - Mail account. (eg. username@gmail.com)
 - Mail account password.
+
+If you are using gmail account please make sure security setting "Allow less secure app: ON".
+Login to gmail acccount and visit following link to check your gmail account setting:
+  https://myaccount.google.com/lesssecureapps
+
 2. Run following script section to configure email. 
 ```shell
 curl -O https://raw.githubusercontent.com/kokleong98/aura-setup/master/configure_mail.sh
