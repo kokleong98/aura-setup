@@ -1,3 +1,5 @@
+#!/bin/bash
+
 cat << EOF
 If you are using gmail account please make sure "Allow less secure app: ON"
 Visit following link to check your gmail account setting:
