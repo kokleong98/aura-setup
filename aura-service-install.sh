@@ -222,8 +222,21 @@ logStatistics()
   stat_aurad_mem=\$(ps -p \$(pidof node aurad) -o %mem --no-headers)
   stat_mysqld_mem=\$(ps -p \$(pidof mysqld) -o %mem --no-headers)
   stat_aura_mem=\$(ps -p \$$ -o %mem --no-headers)
+  
+  logline="{\$(formatJson "t" \$stat_time)"
+  logline="\$logline,\$(formatJson "i" \$stat_interval)"
+  logline="\$logline,\$(formatJson "s" \$stat_status)"
+  logline="\$logline,\$(formatJson "pc" \$stat_parity_cpu)"
+  logline="\$logline,\$(formatJson "ac" \$stat_aurad_cpu)"
+  logline="\$logline,\$(formatJson "mc" \$stat_mysqld_cpu)"
+  logline="\$logline,\$(formatJson "dc" \$stat_aura_cpu)"
+  logline="\$logline,\$(formatJson "pm" \$stat_parity_mem)"
+  logline="\$logline,\$(formatJson "am" \$stat_aurad_mem)"
+  logline="\$logline,\$(formatJson "mm" \$stat_mysqld_mem)"
+  logline="\$logline,\$(formatJson "dm" \$stat_aura_mem)"
+  logline="\$logline}"
 
-  cat >> tmp.txt <<< "{\$(formatJson "i" \$stat_interval), \$(formatJson "s" \$stat_status), \$(formatJson "t" \$stat_time)}"
+  cat >> "${stat_time:0:12}00.txt" <<< "\$logline"
 }
 
 startAura()
