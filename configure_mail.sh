@@ -1,4 +1,4 @@
-echo << EOF
+cat << EOF
 If you are using gmail account please make sure "Allow less secure app: ON"
 Visit following link to check your gmail account setting:
   https://myaccount.google.com/lesssecureapps
@@ -9,10 +9,12 @@ read -p "Enter mail server port (eg. 587): " smtp_port
 read -p "Enter your email (eg. username@gmail.com): " email
 while :
 do
-  read -s -p "Enter your email password: " password
-  read -s -p "Enter your email password: " password2
+  echo "Enter your email password: "
+  read -s password
+  echo "Enter your email password: "
+  read -s password2
 
-  if [ "$password" == "$password2"]; then
+  if [ "$password" == "$password2" ]; then
     break
   else
     echo "Password not match! Please try again."
@@ -30,7 +32,8 @@ fi
 debconf-set-selections <<< "postfix postfix/mailname string $(hostname)"
 debconf-set-selections <<< "postfix postfix/main_mailer_type string 'Internet Site'"
 sudo apt-get install postfix mailutils -y
-cat >> /etc/postfix/sasl/sasl_passwd <<< "[$smtp_server]:$smtp_port $email:$password" 
+sasl_options="[$smtp_server]:$smtp_port $email:$password" 
+cat >> /etc/postfix/sasl/sasl_passwd <<< "$sasl_options" 
 sudo postmap /etc/postfix/sasl/sasl_passwd
 
 sudo chown root:root /etc/postfix/sasl/sasl_passwd /etc/postfix/sasl/sasl_passwd.db
