@@ -35,8 +35,7 @@ fi
 debconf-set-selections <<< "postfix postfix/mailname string $(hostname)"
 debconf-set-selections <<< "postfix postfix/main_mailer_type string 'Internet Site'"
 sudo apt-get install postfix mailutils -y
-sasl_options="[${smtp_server}]:${smtp_port} ${email}:${password}" 
-echo $sasl_options
+sasl_options="[${smtp_server}]:${smtp_port} ${email}:${password}"
 cat >> /etc/postfix/sasl/sasl_passwd <<< "$sasl_options" 
 sudo postmap /etc/postfix/sasl/sasl_passwd
 
