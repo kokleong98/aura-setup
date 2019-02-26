@@ -235,6 +235,7 @@ logStatistics()
   logline="\$logline,\$(formatJson "am" \$stat_aurad_mem)"
   logline="\$logline,\$(formatJson "mm" \$stat_mysqld_mem)"
   logline="\$logline,\$(formatJson "dm" \$stat_aura_mem)"
+  logline="\$logline,\$(formatJson "r" \$stat_reason)"
   logline="\$logline}"
 
   if [ ! -d "stats" ]; then
