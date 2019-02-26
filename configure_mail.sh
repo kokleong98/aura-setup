@@ -11,7 +11,7 @@ while :
 do
   echo "Enter your email password: "
   read -s password
-  echo "Enter your email password: "
+  echo "Enter your email password again: "
   read -s password2
 
   if [ "$password" == "$password2" ]; then
