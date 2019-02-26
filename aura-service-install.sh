@@ -83,6 +83,8 @@ initConfiguration()
   #external ethereum node option
   [ -z "\$rpc_option" ] && rpc_option=0
   [ -z "\$rpc_url" ] && rpc_url=""
+  #statistics logging option
+  [ -z "\$stats_option" ] && stats_option=0
 }
 
 initVariables()
@@ -212,7 +214,6 @@ formatJson()
 logStatistics()
 {
   stat_interval=\$interval
-  stat_status=0
   stat_time=\$(date +%Y%m%d%H%M%S)
   stat_parity_cpu=\$(ps -p \$(pidof parity) -o %cpu --no-headers)
   stat_aurad_cpu=\$(ps -p \$(pidof node aurad) -o %cpu --no-headers)
@@ -322,7 +323,9 @@ do
         off_count_cool=\$((off_count_cool - 1))
         echo "Restart cooling period \$((off_cool - off_count_cool)) / \$off_cool."
       fi
-      ##logStatistics
+      if [ \$stats_option -eq 1 ]; then
+        logStatistics
+      fi
     fi
   fi
   sleep 30;
