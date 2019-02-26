@@ -204,6 +204,28 @@ checkAuradPackageVersion()
   fi
 }
 
+formatJson()
+{
+  echo "\"\$1\":\"\$2\""
+}
+
+logStatistics()
+{
+  stat_interval=\$interval
+  stat_status=0
+  stat_time=\$(date +%Y%m%d%H%M%S)
+  stat_parity_cpu=\$(ps -p \$(pidof parity) -o %cpu --no-headers)
+  stat_aurad_cpu=\$(ps -p \$(pidof node aurad) -o %cpu --no-headers)
+  stat_mysqld_cpu=\$(ps -p \$(pidof mysqld) -o %cpu --no-headers)
+  stat_aura_cpu=\$(ps -p \$$ -o %cpu --no-headers)
+  stat_parity_mem=\$(ps -p \$(pidof parity) -o %mem --no-headers)
+  stat_aurad_mem=\$(ps -p \$(pidof node aurad) -o %mem --no-headers)
+  stat_mysqld_mem=\$(ps -p \$(pidof mysqld) -o %mem --no-headers)
+  stat_aura_mem=\$(ps -p \$$ -o %mem --no-headers)
+
+  cat >> tmp.txt <<< "{\$(formatJson "i" \$stat_interval), \$(formatJson "s" \$stat_status), \$(formatJson "t" \$stat_time)}"
+}
+
 startAura()
 {
   if [ \$rpc_option -eq 1 ] && [ ! -z "\$rpc_url" ]; then
@@ -239,13 +261,15 @@ echo "Monitoring started..."
 while :
 do
   sysminutes=\$((\$(date +"%-M")))
-  
+
   if [ \$((\$sysminutes % \$update_check_interval)) -eq 0 ]; then
     checkAuradPackageVersion
   fi
-  
+
   if [[ \$(docker ps --format "{{.Names}}"  --filter status=running | grep -c "\$services_names") -lt \$services_count ]]; then
     echo "container not running.."
+    stat_reason="container not running.."
+    stat_status=0
     exit 1
   else
     if [ \$((\$sysminutes % \$interval)) -eq 0 ] && [ \$lastminutes -ne \$sysminutes ]; then
@@ -264,6 +288,8 @@ do
           fi
         else
           echo "staking offline."
+          stat_reason="offline"
+          stat_status=0
         fi
         if [ \$sendmail -eq 1 ]; then
           echo "\$mail_message" | mail -s "\$mail_subject" "\$mail_to"
@@ -271,15 +297,16 @@ do
       else
         if [ \$off_count -ge 1 ] && [[ \$(grep "Staking: online" -c <<< "\$logs_aurad") -eq 1 ]]; then
           echo "staking is online..."
+          stat_status=1
         fi
         off_count=0
       fi
 
       if [ \$off_count_cool -ge 1 ]; then
-        off_count_cool=\$((off_count_cool - 1)) 
+        off_count_cool=\$((off_count_cool - 1))
         echo "Restart cooling period \$((off_cool - off_count_cool)) / \$off_cool."
       fi
-
+      ##logStatistics
     fi
   fi
   sleep 30;
