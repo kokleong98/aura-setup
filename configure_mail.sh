@@ -1,9 +1,13 @@
 #!/bin/bash
 
 cat << EOF
-If you are using gmail account please make sure "Allow less secure app: ON"
-Visit following link to check your gmail account setting:
+*************************************************************************************
+If you are using gmail account please make sure security setting
+  "Allow less secure app: ON"
+
+Login to gmail acccount and visit following link to check your gmail account setting:
   https://myaccount.google.com/lesssecureapps
+*************************************************************************************
 EOF
 
 read -p "Enter mail server name (eg. smtp.gmail.com): " smtp_server
