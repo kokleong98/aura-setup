@@ -19,7 +19,7 @@ aura config
 4. Fill in your cold wallet address and sign it with ether wallet.
 
 # configure mail service 
-1. Prepare mail server TLS settings.
+1. Prepare mail server TLS settings before starting step 2.
 - Mail server name. (eg. smtp.gmail.com)
 - Mail server port. (eg. 587)
 - Mail account. (eg. username@gmail.com)
