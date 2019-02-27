@@ -218,8 +218,8 @@ logStatistics()
   psout=\$(ps -p \$(pidof parity) -o %cpu,vsz,rss --no-headers)
   if [ ! -z "\$psout" ]; then
     stat_parity_cpu=\$(awk -F' ' '{printf "%.2f", $1}' <<< "\$psout")
-    stat_parity_vmem=\$(awk -F' ' '{printf "%.2f", $2}' <<< "\$psout")
-    stat_parity_mem=\$(awk -F' ' '{printf "%.2f", $3}' <<< "\$psout")
+    stat_parity_vmem=\$(awk -F' ' '{printf "%.2f", $2/1024}' <<< "\$psout")
+    stat_parity_mem=\$(awk -F' ' '{printf "%.2f", $3/1024}' <<< "\$psout")
   else
     stat_parity_cpu=""
     stat_parity_vmem=""
@@ -228,8 +228,8 @@ logStatistics()
   psout=\$(ps -p \$(pidof node aurad) -o %cpu,vsz,rss --no-headers)
   if [ ! -z "\$psout" ]; then
     stat_aurad_cpu=\$(awk -F' ' '{printf "%.2f", $1}' <<< "\$psout")
-    stat_aurad_vmem=\$(awk -F' ' '{printf "%.2f", $2}' <<< "\$psout")
-    stat_aurad_mem=\$(awk -F' ' '{printf "%.2f", $3}' <<< "\$psout")
+    stat_aurad_vmem=\$(awk -F' ' '{printf "%.2f", $2/1024}' <<< "\$psout")
+    stat_aurad_mem=\$(awk -F' ' '{printf "%.2f", $3/1024}' <<< "\$psout")
   else
     stat_aurad_cpu=""
     stat_aurad_vmem=""
@@ -238,8 +238,8 @@ logStatistics()
   psout=\$(ps -p \$(pidof mysqld) -o %cpu,vsz,rss --no-headers)
   if [ ! -z "\$psout" ]; then
     stat_mysqld_cpu=\$(awk -F' ' '{printf "%.2f", $1}' <<< "\$psout")
-    stat_mysqld_vmem=\$(awk -F' ' '{printf "%.2f", $2}' <<< "\$psout")
-    stat_mysqld_mem=\$(awk -F' ' '{printf "%.2f", $3}' <<< "\$psout")
+    stat_mysqld_vmem=\$(awk -F' ' '{printf "%.2f", $2/1024}' <<< "\$psout")
+    stat_mysqld_mem=\$(awk -F' ' '{printf "%.2f", $3/1024}' <<< "\$psout")
   else
     stat_mysqld_cpu=""
     stat_mysqld_vmem=""
@@ -248,8 +248,8 @@ logStatistics()
   psout=\$(ps -p \$$ -o %cpu,vsz,rss --no-headers)
   if [ ! -z "\$psout" ]; then
     stat_aura_cpu=\$(awk -F' ' '{printf "%.2f", $1}' <<< "\$psout")
-    stat_aura_vmem=\$(awk -F' ' '{printf "%.2f", $2}' <<< "\$psout")
-    stat_aura_mem=\$(awk -F' ' '{printf "%.2f", $3}' <<< "\$psout")
+    stat_aura_vmem=\$(awk -F' ' '{printf "%.2f", $2/1024}' <<< "\$psout")
+    stat_aura_mem=\$(awk -F' ' '{printf "%.2f", $3/1024}' <<< "\$psout")
   else
     stat_aura_cpu=""
     stat_aura_vmem=""
