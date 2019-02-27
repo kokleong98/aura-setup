@@ -216,7 +216,7 @@ logStatistics()
   stat_interval=\$interval
   stat_time=\$(date +%Y%m%d%H%M%S)
   psout=\$(ps -p \$(pidof parity) -o %cpu,vsz,rss --no-headers)
-  if [ ! -z "\$psout" ]
+  if [ ! -z "\$psout" ]; then
     stat_parity_cpu=\$(awk -F' ' '{printf "%.2f", $1}' <<< "\$psout")
     stat_parity_vmem=\$(awk -F' ' '{printf "%.2f", $2}' <<< "\$psout")
     stat_parity_mem=\$(awk -F' ' '{printf "%.2f", $3}' <<< "\$psout")
@@ -226,7 +226,7 @@ logStatistics()
     stat_parity_mem=""
   fi
   psout=\$(ps -p \$(pidof node aurad) -o %cpu,vsz,rss --no-headers)
-  if [ ! -z "\$psout" ]
+  if [ ! -z "\$psout" ]; then
     stat_aurad_cpu=\$(awk -F' ' '{printf "%.2f", $1}' <<< "\$psout")
     stat_aurad_vmem=\$(awk -F' ' '{printf "%.2f", $2}' <<< "\$psout")
     stat_aurad_mem=\$(awk -F' ' '{printf "%.2f", $3}' <<< "\$psout")
@@ -236,7 +236,7 @@ logStatistics()
     stat_aurad_mem=""
   fi
   psout=\$(ps -p \$(pidof mysqld) -o %cpu,vsz,rss --no-headers)
-  if [ ! -z "\$psout" ]
+  if [ ! -z "\$psout" ]; then
     stat_mysqld_cpu=\$(awk -F' ' '{printf "%.2f", $1}' <<< "\$psout")
     stat_mysqld_vmem=\$(awk -F' ' '{printf "%.2f", $2}' <<< "\$psout")
     stat_mysqld_mem=\$(awk -F' ' '{printf "%.2f", $3}' <<< "\$psout")
@@ -246,7 +246,7 @@ logStatistics()
     stat_mysqld_mem=""
   fi
   psout=\$(ps -p \$$ -o %cpu,vsz,rss --no-headers)
-  if [ ! -z "\$psout" ]
+  if [ ! -z "\$psout" ]; then
     stat_aura_cpu=\$(awk -F' ' '{printf "%.2f", $1}' <<< "\$psout")
     stat_aura_vmem=\$(awk -F' ' '{printf "%.2f", $2}' <<< "\$psout")
     stat_aura_mem=\$(awk -F' ' '{printf "%.2f", $3}' <<< "\$psout")
