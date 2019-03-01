@@ -4,8 +4,7 @@ This unofficial guide is based on my personal experience on aura staking and I a
 
 # aura-setup
 Aura staking setup
-
-1. Run following script section to install aurad and dependencies. 
+1. SSH to your node and run following script section to install aurad and dependencies. 
 ```shell
 curl -O https://raw.githubusercontent.com/kokleong98/aura-setup/master/aura-deploy.sh 
 chmod +x aura-deploy.sh
@@ -32,7 +31,7 @@ Install aura as systemd service auto run aura at system reboot. This have depede
 
 ## Basic aura systemd service setup (Without email notification)
 Make sure you have finished sync with the network before starting aura.service else it will restart aura because staking is offline.
-1. Run following script section to install aurad service and key in username setup during aura-setup. *You may be prompt for sudo password.
+1. SSH to your node and run following script section to install aurad service and key in username setup during aura-setup. *You may be prompt for sudo password.
 ```
 curl -O https://raw.githubusercontent.com/kokleong98/aura-setup/master/aura-service-install.sh 
 chmod +x aura-service-install.sh
@@ -57,7 +56,7 @@ If you are using gmail account please make sure security setting "Allow less sec
 Login to gmail acccount and visit following link to check your gmail account setting:
   https://myaccount.google.com/lesssecureapps
 
-2. Run following script section to configure email. 
+2. SSH to your node and run following script section to configure email. 
 ```shell
 curl -O https://raw.githubusercontent.com/kokleong98/aura-setup/master/configure_mail.sh
 chmod +x configure_mail.sh
@@ -86,7 +85,7 @@ rpc_url=""
 ```
 
 ## Advanced aura systemd service setup (With email notification)
-1. Run following script section to install aurad service and key in username setup during aura-setup.
+1. SSH to your node and run following script section to install aurad service and key in username setup during aura-setup.
 ```
 curl -O https://raw.githubusercontent.com/kokleong98/aura-setup/master/aura-service-install.sh 
 chmod +x aura-service-install.sh
@@ -119,7 +118,7 @@ scp -r ~/.aurad/ <myusername>@<hostip>:~
 ```
 
 # aura cron staking offline monitoring setup
-1. Run following script section to create cron.bash and mon_actions.sh file on account home directory.
+1. SSH to your node and run following script section to create cron.bash and mon_actions.sh file on account home directory.
 ```
 curl -O https://raw.githubusercontent.com/kokleong98/aura-setup/master/aura.bash
 curl -O https://raw.githubusercontent.com/kokleong98/aura-setup/master/mon_actions.sh
