@@ -220,7 +220,12 @@ logStatistics()
 {
   stat_interval=\$interval
   stat_time=\$(date +%Y%m%d%H%M%S)
-  psout=\$(ps -p \$(pidof parity) -o %cpu,vsz,rss --no-headers)
+  ppid=\$(pidof parity)
+  if [ ! -z "\$ppid" ]; then
+    psout=\$(ps -p \$ppid -o %cpu,vsz,rss --no-headers)
+  else
+    psout=""
+  fi
   if [ ! -z "\$psout" ]; then
     stat_parity_cpu=\$(awk -F' ' '{printf "%.2f", \$1}' <<< "\$psout")
     stat_parity_vmem=\$(awk -F' ' '{printf "%.2f", \$2/1024}' <<< "\$psout")
