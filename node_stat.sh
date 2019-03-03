@@ -1,6 +1,12 @@
 #!/bin/bash
 
 awk  '
+function toDatetime(data, ret)
+{
+  ret=mktime(substr(data, 1, 4)  " "  substr(data, 5, 2)  " "  substr(data, 7, 2)  " "   substr(data, 9, 2) " "  substr(data, 11, 2) " "  substr(data, 13, 2) );
+  return ret;
+}
+
 function min(arr, rowsize, name,     ret)
 {
   first=0
