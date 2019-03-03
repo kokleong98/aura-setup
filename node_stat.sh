@@ -1,37 +1,59 @@
-tail -n 10000 20190227.txt | awk -v dsum="$dsum" -v dfirst="$dfirst" -v dlast="$dlast"  'BEGIN {FS="[,:\"]+"} {
-  for(i=1;i<=NF;i++){
-    if($i == "pv") dsum+=$(i+1);
-  }
+#!/bin/bash
+
+awk  '
+function min(arr, rowsize, name,     ret)
+{
+  first=0
+  for(i=1; i<=rowsize; i++)
   {
-    if(NR == 1) dfirst=$3;
-    if(NR == FNR)dlast=$3;
+    #print arr[i, name]
+    if(arr[i, name] == "") continue;
+    if(first==0)
+    {
+       ret=arr[i, name];
+       first=1
+    }
+    if(ret > arr[i, name])
+    {
+       ret=arr[i, name];
+    }
   }
+  return ret;
 }
-{print dsum ", " dsum / NR;} 
-END{print FNR "," dsum, dfirst, dlast}'
 
-tail -n 10000 20190227.txt | awk -v dsum="$dsum" -v dfirst="$dfirst" -v dlast="$dlast"  'BEGIN {FS="[,:\"]+"} {
-  for(i=1;i<=NF;i++){
-    if($i == "pv") dsum+=$(i+1);
-  }
+function max(arr, rowsize, name,     ret)
+{
+  first=0
+  for(i=1; i<=rowsize; i++)
   {
-    if(NR == 1) dfirst=$3;
-    if(NR == FNR)dlast=$3;
+    #print arr[i, name]
+    if(arr[i, name] == "") continue;
+    if(first==0)
+    {
+       ret=arr[i, name];
+       first=1
+    }
+    if(ret < arr[i, name])
+    {
+       ret=arr[i, name];
+    }
   }
+  return ret;
 }
-END{print FNR "," dsum, dfirst, dlast}'
+# Load all fields of each record into recs.
+BEGIN{FS="[{},:\"]+"}
+{
+  totalcol=0
 
-
-
-
-tail -n 10000 20190227.txt | awk -v dsum="$dsum" -v dfirst="$dfirst" -v dlast="$dlast"  '  BEGIN {FS="[,:\"]+"} {
-  for(i=1;i<=NF;i++){
-    if($i == "pv") dsum+=$(i+1);
-  }
+  for (i = 3; i <= NF; i+=2)
   {
-    if(NR == 1) dfirst=$3;
-    if(NR == FNR)dlast=$3;
+    recs[NR, $(i-1)] = $i;
+    totalcol+=1;
   }
+  totalrow+=1;
 }
-{print dsum ", " dsum / NR;} 
-END{print FNR "," dsum, dfirst, dlast}'
+END {
+  print min(recs, totalrow, "pc");
+  print max(recs, totalrow, "pc");
+  #print recs[1, "pc"]
+}' $1
