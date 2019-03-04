@@ -277,7 +277,7 @@ logStatistics()
   logline="\$logline,\$(formatJson "av" \$stat_aurad_vmem)"
   logline="\$logline,\$(formatJson "mc" \$stat_mysqld_cpu)"
   logline="\$logline,\$(formatJson "mm" \$stat_mysqld_mem)"
-  logline="\$logline,\$(formatJson "mv" \$stat_mysqld_mem)"
+  logline="\$logline,\$(formatJson "mv" \$stat_mysqld_vmem)"
   logline="\$logline,\$(formatJson "dc" \$stat_aura_cpu)"
   logline="\$logline,\$(formatJson "dm" \$stat_aura_mem)"
   logline="\$logline,\$(formatJson "dv" \$stat_aura_vmem)"
