@@ -114,6 +114,10 @@ fetchAuradLogs()
 fetchAuradStatus()
 {
   logs_aurad=\$(aura status)
+  my_period_credit=\$(grep "My Period Credits"  <<< "\$logs_aurad" | awk -F ' ' '{print \$6}')
+  tot_period_credit=\$(grep "My Period Credits"  <<< "\$logs_aurad" | awk -F ' ' '{print \$8}')
+  staked=\$(grep "^Staked AURA"  <<< "\$logs_aurad" | awk -F ' ' '{print \$3}')
+  tot_staked=\$(grep "^Total Staked AURA"  <<< "\$logs_aurad" | awk -F ' ' '{print \$4}')
 }
 
 checkAuradSnapshot()
@@ -281,6 +285,10 @@ logStatistics()
   logline="\$logline,\$(formatJson "dc" \$stat_aura_cpu)"
   logline="\$logline,\$(formatJson "dm" \$stat_aura_mem)"
   logline="\$logline,\$(formatJson "dv" \$stat_aura_vmem)"
+  logline="\$logline,\$(formatJson "cc" \$my_period_credit)"
+  logline="\$logline,\$(formatJson "ct" \$tot_period_credit)"
+  logline="\$logline,\$(formatJson "ss" \$staked)"
+  logline="\$logline,\$(formatJson "st" \$tot_staked)"
   logline="\$logline,\$(formatJson "r" \$stat_reason)"
   logline="\$logline}"
 
