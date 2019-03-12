@@ -5,11 +5,9 @@ sendmail=0
 mail_subject="AURA STAKING OFFLINE."
 mail_message="AURA STAKING OFFLINE."
 mail_to="Your@email.com"
-offline_count=10
 
-#check whether last 10 consecutives staking offline
-test=$(aura logs | grep STAKING | tail -n $offline_count  | grep OFFLINE -c)
-if [ $test -eq $offline_count ]
+test=$(aura status | grep 'Staking: offline' -c)
+if [ $test -eq 1 ]
 then
   if [ $sendmail -eq 1 ]
   then
