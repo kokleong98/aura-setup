@@ -13,7 +13,7 @@ if [ $test -eq $offline_count ]
 then
   if [ $sendmail -eq 1 ]
   then
-    echo $mail_message | mail -s $mail_message $mail_to
+    echo "$mail_message" | mail -s "$mail_subject" "$mail_to"
   fi
 
   #stop aura services
