@@ -4,7 +4,7 @@
 #########################################
 
 read -p "Enter aura service account: " username
-getent passwd $username > /dev/null 2&>1
+getent passwd $username > /dev/null 2>&1
 if [ $? -ne 0 ]
 then
   echo "Invalid username"
