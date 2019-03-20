@@ -314,10 +314,10 @@ logStatistics()
   logline="\$logline,\$(formatJson "r" \$stat_reason)"
   logline="\$logline}"
 
-  if [ ! -d "\${DIR}\stats" ]; then
-    mkdir "\${DIR}\stats"
+  if [ ! -d "\${DIR}/stats" ]; then
+    mkdir "\${DIR}/stats"
   fi
-  cat >> "\${DIR}\stats/\${stat_time:0:8}.txt" <<< "\$logline"
+  cat >> "\${DIR}/stats/\${stat_time:0:8}.txt" <<< "\$logline"
 }
 
 startAura()
