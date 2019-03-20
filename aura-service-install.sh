@@ -56,9 +56,10 @@ fi
 cat > aura-start.sh << EOF
 #!/bin/bash
 source /home/$username/.nvm/nvm.sh
+DIR="\$( cd "\$( dirname "\${BASH_SOURCE[0]}" )" && pwd )"
 
-if [ -f "aura.conf" ]; then
-  source aura.conf
+if [ -f "\${DIR}\aura.conf" ]; then
+  source "\${DIR}\aura.conf"
   echo "Loading aura.conf settings."
 fi
 
@@ -313,10 +314,10 @@ logStatistics()
   logline="\$logline,\$(formatJson "r" \$stat_reason)"
   logline="\$logline}"
 
-  if [ ! -d "stats" ]; then
-    mkdir "stats"
+  if [ ! -d "\${DIR}\stats" ]; then
+    mkdir "\${DIR}\stats"
   fi
-  cat >> "stats/\${stat_time:0:8}.txt" <<< "\$logline"
+  cat >> "\${DIR}\stats/\${stat_time:0:8}.txt" <<< "\$logline"
 }
 
 startAura()
