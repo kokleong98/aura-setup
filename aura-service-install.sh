@@ -58,8 +58,8 @@ cat > aura-start.sh << EOF
 source /home/$username/.nvm/nvm.sh
 DIR="\$( cd "\$( dirname "\${BASH_SOURCE[0]}" )" && pwd )"
 
-if [ -f "\${DIR}\aura.conf" ]; then
-  source "\${DIR}\aura.conf"
+if [ -f "\${DIR}/aura.conf" ]; then
+  source "\${DIR}/aura.conf"
   echo "Loading aura.conf settings."
 fi
 
