@@ -1,14 +1,16 @@
 #!/bin/bash
 
 days="$1"
-fromdate="$(date -d "+$((days * -1)) days" +%Y%m%d)"
+fromdate="$(date -d "+$(((days * -1)+1)) days" +%Y%m%d)"
 tilldate="$(date  +%Y%m%d)"
+newline='
+'
 
-for ((val=$days; val >= 1; val--))
+for ((val=$days-1; val >= 0; val--))
 do
   curdate="$(date -d "+$((val * -1)) days" +%Y%m%d)"
 
-awk  '
+line=$(awk  '
 function toDatetime(data, ret)
 {
   ret=mktime(substr(data, 1, 4)  " "  substr(data, 5, 2)  " "  substr(data, 7, 2)  " "   substr(data, 9, 2) " "  substr(data, 11, 2) " "  substr(data, 13, 2) );
@@ -55,7 +57,19 @@ BEGIN{FS="[{},:\"]+"}
 END {
   diff=maxdate - mindate;
   cnt=int((diff/60)+0.5)+1;
-  print ARGV[1] "," cnt "," online "," offline "," miss
+  printf "%s,%s,%s,%s,%s,%s", ARGV[1], cnt, online, offline, miss, (online/cnt)*100;
 }' "$curdate.txt"
+)
+
+if [ -z "$result"  ]; then
+  result="$line"
+else
+  result="$result$newline$line"
+fi
 
 done
+
+echo "$result" | awk -F ',' '{
+  print "Date: " $1
+  print "Online: " $6 "%" ", Offline: " $4  ", No status: " $5 ", Record: " $2  ", Miss: " $2 - $3 - $4
+}'
