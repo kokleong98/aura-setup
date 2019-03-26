@@ -1,6 +1,10 @@
 #!/bin/bash
 
-days="$1"
+if [ -z "$1" ]; then
+  days="1"
+else
+  days="$1"
+fi
 fromdate="$(date -d "+$(((days * -1)+1)) days" +%Y%m%d)"
 tilldate="$(date  +%Y%m%d)"
 newline='
@@ -10,6 +14,10 @@ for ((val=$days-1; val >= 0; val--))
 do
   curdate="$(date -d "+$((val * -1)) days" +%Y%m%d)"
 
+  if [ ! -f "$curdate.txt" ]; then
+    echo "$curdate.txt file not found."
+    continue;
+  fi
 line=$(awk  '
 function toDatetime(data, ret)
 {
@@ -70,6 +78,24 @@ fi
 done
 
 echo "$result" | awk -F ',' '{
-  print "Date: " $1
-  print "Online: " $6 "%" ", Offline: " $4  ", No status: " $5 ", Record: " $2  ", Miss: " $2 - $3 - $4
+  printf "\033[0;33mDate: %s-%s-%s\033[0m\n", substr($1, 1, 4), substr($1, 5, 2), substr($1, 7, 2)
+  printf "\033[0;32mOnline:\033[0m \033[30;48;5;82m%8.4f\033[0m%% ", $6
+  if ($4 == "")
+  {
+    printf "\033[0;31mOffline:\033[0m \033[41m%4s\033[0m ", 0
+  }
+  else
+  {
+    printf "\033[0;31mOffline:\033[0m \033[41m%4s\033[0m ", $4
+  }
+  if ($5 == "")
+  {
+    printf "\033[0;34mNo status:\033[0m \033[4;5;82m%4s\033[0m ", 0
+  }
+  else
+  {
+    printf "\033[0;34mNo status:\033[0m \033[4;5;82m%4s\033[0m ", $5
+  }
+  printf "\033[0;35mRecord:\033[0m \033[4;5;82m%4s\033[0m ", $2
+  printf "\033[0;36mMiss:\033[0m \033[4;5;82m%4s\033[0m\n\n", $2 - $3 - $4
 }'
