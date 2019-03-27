@@ -79,7 +79,7 @@ fi
 done
 
 echo "$result" | awk -F ',' '{
-  printf "\033[0;33mDate: %s-%s-%s\033[0m\n", substr($1, 1, 4), substr($1, 5, 2), substr($1, 7, 2)
+  printf "\033[0;33mDate: %s-%s-%s\033[0m\n", substr($1, length($1) - 11, 4), substr($1, length($1) - 7, 2), substr($1, length($1) - 5, 2)
   printf "\033[0;32mOnline:\033[0m \033[30;48;5;82m%8.4f\033[0m%% ", $6
   if ($4 == "")
   {
