@@ -1,4 +1,5 @@
 #!/bin/bash
+DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 
 if [ -z "$1" ]; then
   days="1"
@@ -14,7 +15,7 @@ for ((val=$days-1; val >= 0; val--))
 do
   curdate="$(date -d "+$((val * -1)) days" +%Y%m%d)"
 
-  if [ ! -f "$curdate.txt" ]; then
+  if [ ! -f "$DIR/stats/$curdate.txt" ]; then
     echo "$curdate.txt file not found."
     continue;
   fi
@@ -66,7 +67,7 @@ END {
   diff=maxdate - mindate;
   cnt=int((diff/60)+0.5)+1;
   printf "%s,%s,%s,%s,%s,%s", ARGV[1], cnt, online, offline, miss, (online/cnt)*100;
-}' "$curdate.txt"
+}' "$DIR/stats/$curdate.txt"
 )
 
 if [ -z "$result"  ]; then
