@@ -22,7 +22,8 @@ do
 line=$(awk  '
 function toDatetime(data, ret)
 {
-  ret=mktime(substr(data, 1, 4)  " "  substr(data, 5, 2)  " "  substr(data, 7, 2)  " "   substr(data, 9, 2) " "  substr(data, 11, 2) " "  substr(data, 13, 2) );
+  # ret=mktime(substr(data, 1, 4)  " "  substr(data, 5, 2)  " "  substr(data, 7, 2)  " "   substr(data, 9, 2) " "  substr(data, 11, 2) " "  substr(data, 13, 2) );
+  ret=mktime(substr(data, 1, 4)  " "  substr(data, 5, 2)  " "  substr(data, 7, 2)  " "   substr(data, 9, 2) " "  substr(data, 11, 2) " 00"  );
   return ret;
 }
 
@@ -64,13 +65,13 @@ BEGIN{FS="[{},:\"]+"}
   totalrow+=1;
 }
 END {
-  diff=maxdate - mindate;
-  cnt=int((diff/60)+0.5)+1;
+  diff=maxdate - mindate + 60;
+  cnt=int((diff/60));
   printf "%s,%s,%s,%s,%s,%s", ARGV[1], cnt, online, offline, miss, (online/cnt)*100;
 }' "$DIR/stats/$curdate.txt"
 )
 
-if [ -z "$result"  ]; then
+if [ -z "$result" ]; then
   result="$line"
 else
   result="$result$newline$line"
@@ -81,6 +82,7 @@ done
 echo "$result" | awk -F ',' '{
   printf "\033[0;33mDate: %s-%s-%s\033[0m\n", substr($1, length($1) - 11, 4), substr($1, length($1) - 7, 2), substr($1, length($1) - 5, 2)
   printf "\033[0;32mOnline:\033[0m \033[30;48;5;82m%8.4f\033[0m%% ", $6
+  printf "\033[4;5;82m%4s\033[0m ", $3
   if ($4 == "")
   {
     printf "\033[0;31mOffline:\033[0m \033[41m%4s\033[0m ", 0
@@ -97,6 +99,6 @@ echo "$result" | awk -F ',' '{
   {
     printf "\033[0;34mNo status:\033[0m \033[4;5;82m%4s\033[0m ", $5
   }
-  printf "\033[0;35mRecord:\033[0m \033[4;5;82m%4s\033[0m ", $2
+  printf "\033[0;35mEst.:\033[0m \033[4;5;82m%4s\033[0m ", $2
   printf "\033[0;36mMiss:\033[0m \033[4;5;82m%4s\033[0m\n\n", $2 - $3 - $4
 }'
