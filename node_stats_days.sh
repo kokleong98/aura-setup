@@ -7,21 +7,28 @@ else
   days="$1"
 fi
 
-fromdate="$(date -d "+$(((days * -1)+1)) days" +%Y%m%d)"
-tilldate="$(date  +%Y%m%d)"
+if [ -z "$2" ]; then
+  fromdate="$(date -d "+$(((days * -1)+1)) days" +%Y-%m-%d)"
+  tilldate="$(date  +%Y-%m-%d)"
+else
+  fromdate="$(date -d "$2 +$(((days * -1)+1)) days" +%Y-%m-%d)"
+  tilldate="$(date -d "$2" +%Y-%m-%d)"
+fi
+
 newline='
 '
 
 for ((val=$days-1; val >= 0; val--))
 do
-  curdate="$(date -d "+$((val * -1)) days" +%Y%m%d)"
+  curdate="$(date -d "$tilldate +$((val * -1)) days" +%Y%m%d)"
 
   if [ ! -f "$DIR/stats/$curdate.txt" ]; then
     echo "$curdate.txt file not found."
     continue;
   fi
 
-  line=$(awk  '
+  line=$(
+    awk  '
     function toDatetime(data, ret)
     {
       # ret=mktime(substr(data, 1, 4)  " "  substr(data, 5, 2)  " "  substr(data, 7, 2)  " "   substr(data, 9, 2) " "  substr(data, 11, 2) " "  substr(data, 13, 2) );
@@ -111,7 +118,7 @@ BEGIN{FS=","}
   total_rows++;
 }
 END {
-  printf "\033[0;33m%-9s: %s day(s)\033[0m\n", "Summary",  total_rows
+  printf "\033[0;33m%-9s: Last %s day(s) from %s\033[0m\n", "Summary",  total_rows, tilldate
   printf "\033[0;32m%-9s:\033[0m \033[30;48;5;82m%8.4f\033[0m%% ", "Online", (tot_online / tot_cnt)*100
   printf "\033[30;48;5;82m%6s\033[0m\n", tot_online
   printf "\033[0;31m%-9s:\033[0m \033[41m%8.4f\033[0m%% ", "Offline", (tot_offline / tot_cnt)*100
@@ -119,6 +126,6 @@ END {
   printf "\033[0;34m%-9s:\033[0m \033[4;5;82m%8.4f\033[0m%% ", "No status", (tot_nostatus / tot_cnt)*100
   printf "\033[4;5;82m%6s\033[0m\n", tot_nostatus
   printf "\033[0;36m%-9s:\033[0m \033[4;5;82m%8.4f\033[0m%% ", "Miss", ((tot_cnt - tot_online - tot_offline - tot_nostatus) / tot_cnt)*100
-  printf "\033[4;5;82m%6s\033[0m\n", (tot_cnt - tot_online - tot_offline - tot_nostatus)
+  printf "\033[4;5;82m%6s\033[0m\n\n", (tot_cnt - tot_online - tot_offline - tot_nostatus)
 }
-' <<< "$result"
+' "tilldate=$tilldate" <<< "$result"
