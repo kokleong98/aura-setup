@@ -31,34 +31,27 @@ do
     awk  '
     function toDatetime(data, ret)
     {
-      # ret=mktime(substr(data, 1, 4)  " "  substr(data, 5, 2)  " "  substr(data, 7, 2)  " "   substr(data, 9, 2) " "  substr(data, 11, 2) " "  substr(data, 13, 2) );
       ret=mktime(substr(data, 1, 4)  " "  substr(data, 5, 2)  " "  substr(data, 7, 2)  " "   substr(data, 9, 2) " "  substr(data, 11, 2) " 00"  );
       return ret;
     }
 
     # Load all fields of each record into recs.
-    BEGIN{FS="[{},:\"]+"}
+    BEGIN{FS="[{},:]+"}
     {
-      totalcol=0
-
+      totalcol=0;
       for (i = 3; i <= NF; i+=2)
       {
-        recs[NR, $(i-1)] = $i;
+        recs[NR, substr($(i-1), 2, length($(i-1))-2)] = substr($i, 2, length($i)-2);
         totalcol+=1;
       }
-      if (NR == 1)
-      {
-        last_stake=0;
-      }
-
-      if(match(recs[NR, "st"], /^[0-9]*[.]?[0-9]*$/))
+      if (length(last_stake) == 0) last_stake=recs[NR, "st"];
+      if(length(recs[NR, "st"]) > 0 && match(recs[NR, "st"], /^[0-9]*[.]?[0-9]*$/))
       {
           if(last_stake != recs[NR, "st"])
           {
-              last_stake=recs[NR, "st"]
-              printf "%s,%s\n",  recs[NR, "t"], recs[NR, "st"]
+              last_stake=recs[NR, "st"];
+              printf "%s,%s\n",  recs[NR, "t"], recs[NR, "st"];
           }
-          
       }
       totalrow+=1;
     }
@@ -86,20 +79,20 @@ awk '
     if(line % 2 == 0)
     {
       mydate=substr(lastday, 1, 4) "-" substr(lastday, 5, 2) "-" substr(lastday, 7, 2)
-      printf "%-10s", mydate
-      printf "%4s\033[0m", (range_10k + range_50k + range_100k + range_200k + range_500k + range_1mill + range_2mill + range_5mill + range_remains)
-      printf "\033[41m%4s\033[0m", (range_d10k + range_d50k + range_d100k + range_d200k + range_d500k + range_d1mill + range_d2mill + range_d5mill + range_dremains)
-      printf "%8.3f\033[0m\033[41m%8.3f\033[0m", stakePositive / 1000000, stakeNegative / 1000000
-      printf "%4s\033[0m\033[41m%4s\033[0m", range_10k, range_d10k
-      printf "%4s\033[0m\033[41m%4s\033[0m", range_50k, range_d50k
-      printf "%4s\033[0m\033[41m%4s\033[0m", range_100k, range_d100k
-      printf "%4s\033[0m\033[41m%4s\033[0m", range_200k, range_d200k
-      printf "%4s\033[0m\033[41m%4s\033[0m", range_500k, range_d500k
-      printf "%4s\033[0m\033[41m%4s\033[0m", range_1mill, range_d1mill
-      printf "%4s\033[0m\033[41m%4s\033[0m", range_2mill, range_d2mill
-      printf "%4s\033[0m\033[41m%4s\033[0m", range_5mill, range_d5mill
-      printf "%4s\033[0m\033[41m%4s\033[0m", range_remains, range_dremains
-      printf "\n"
+      printf "%-10s", mydate;
+      printf "%4s\033[0m", (range_10k + range_50k + range_100k + range_200k + range_500k + range_1mill + range_2mill + range_5mill + range_remains);
+      printf "\033[41m%4s\033[0m", (range_d10k + range_d50k + range_d100k + range_d200k + range_d500k + range_d1mill + range_d2mill + range_d5mill + range_dremains);
+      printf "%8.3f\033[0m\033[41m%8.3f\033[0m", stakePositive / 1000000, stakeNegative / 1000000;
+      printf "%4s\033[0m\033[41m%4s\033[0m", range_10k, range_d10k;
+      printf "%4s\033[0m\033[41m%4s\033[0m", range_50k, range_d50k;
+      printf "%4s\033[0m\033[41m%4s\033[0m", range_100k, range_d100k;
+      printf "%4s\033[0m\033[41m%4s\033[0m", range_200k, range_d200k;
+      printf "%4s\033[0m\033[41m%4s\033[0m", range_500k, range_d500k;
+      printf "%4s\033[0m\033[41m%4s\033[0m", range_1mill, range_d1mill;
+      printf "%4s\033[0m\033[41m%4s\033[0m", range_2mill, range_d2mill;
+      printf "%4s\033[0m\033[41m%4s\033[0m", range_5mill, range_d5mill;
+      printf "%4s\033[0m\033[41m%4s\033[0m", range_remains, range_dremains;
+      printf "\n";
     }
     else
     {
@@ -200,11 +193,12 @@ awk '
     if(NR == 1)
     {
       line=1;
-      resetStats()
-      lastday=substr($1, 1, 8)
-      last_totalstakes=$2
+      resetStats();
+      lastday=substr($1, 1, 8);
+      last_totalstakes=$2;
       printHeader();
     }
+
     if(lastday == substr($1, 1, 8))
     {
       if(last_totalstakes != $2) daychanges+=1;
@@ -215,11 +209,11 @@ awk '
       printSumm();
       resetStats();
       if(last_totalstakes != $2) daychanges+=1;
-      lastday=substr($1, 1, 8)
-      last_totalstakes=$2
+      lastday=substr($1, 1, 8);
+      last_totalstakes=$2;
     }
     calcStats(last_totalstakes - $2);
-    last_totalstakes=$2
+    last_totalstakes=$2;
   }
   END {
     line++;
