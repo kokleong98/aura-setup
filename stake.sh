@@ -90,6 +90,7 @@ awk '
       printf "%-10s", mydate
       printf "%4s\033[0m", (range_10k + range_50k + range_100k + range_200k + range_500k + range_1mill + range_2mill + range_5mill + range_remains)
       printf "\033[41m%4s\033[0m", (range_d10k + range_d50k + range_d100k + range_d200k + range_d500k + range_d1mill + range_d2mill + range_d5mill + range_dremains)
+      printf "%8.3f\033[0m\033[41m%8.3f\033[0m", stakePositive / 1000000, stakeNegative / 1000000
       printf "%4s\033[0m\033[41m%4s\033[0m", range_10k, range_d10k
       printf "%4s\033[0m\033[41m%4s\033[0m", range_50k, range_d50k
       printf "%4s\033[0m\033[41m%4s\033[0m", range_100k, range_d100k
@@ -107,6 +108,7 @@ awk '
       printf "\033[4;5;82m%-10s\033[0m", mydate
       printf "\033[1;30;47m%4s\033[0m", (range_10k + range_50k + range_100k + range_200k + range_500k + range_1mill + range_2mill + range_5mill + range_remains)
       printf "\033[41m%4s\033[0m", (range_d10k + range_d50k + range_d100k + range_d200k + range_d500k + range_d1mill + range_d2mill + range_d5mill + range_dremains)
+      printf "\033[1;30;47m%8.3f\033[0m\033[41m%8.3f\033[0m", stakePositive / 1000000, stakeNegative / 1000000
       printf "\033[1;30;47m%4s\033[0m\033[41m%4s\033[0m", range_10k, range_d10k
       printf "\033[1;30;47m%4s\033[0m\033[41m%4s\033[0m", range_50k, range_d50k
       printf "\033[1;30;47m%4s\033[0m\033[41m%4s\033[0m", range_100k, range_d100k
@@ -122,7 +124,8 @@ awk '
 
   function printHeader()
   {
-    printf "\033[4;5;82m%-10s\033[0m\033[30;47m%8s\033[0m", "Date", "Moves"
+    printf "\033[30;47m%-10s\033[0m\033[4;5;82m%-8s\033[0m", "Date", "  Moves"
+    printf "\033[30;47m%-16s\033[0m", "  Volumes(Mils)"
     printf "\033[4;5;82m%-8s\033[0m", " <= 10k"
     printf "\033[30;47m%-8s\033[0m", " <= 50k"
     printf "\033[4;5;82m%-8s\033[0m", "<= 100k"
@@ -140,6 +143,8 @@ awk '
   function resetStats()
   {
     daychanges=1;
+    stakePositive=0
+    stakeNegative=0
     range_10k=0
     range_50k=0
     range_100k=0
@@ -165,6 +170,7 @@ awk '
     if(data < 0)
     {
       data=abs(data);
+      stakeNegative+=data;
       if (data <= 10000)
       {
         range_d10k++;
@@ -204,6 +210,7 @@ awk '
     }
     else
     {
+      stakePositive+=data;
       if (data <= 10000)
       {
         range_10k++;
