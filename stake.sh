@@ -77,7 +77,6 @@ done
 awk '
   function toDatetime(data, ret)
   {
-    # ret=mktime(substr(data, 1, 4)  " "  substr(data, 5, 2)  " "  substr(data, 7, 2)  " "   substr(data, 9, 2) " "  substr(data, 11, 2) " "  substr(data, 13, 2) );
     ret=mktime(substr(data, 1, 4)  " "  substr(data, 5, 2)  " "  substr(data, 7, 2)  " "   substr(data, 9, 2) " "  substr(data, 11, 2) " 00"  );
     return ret;
   }
@@ -171,82 +170,28 @@ awk '
     {
       data=abs(data);
       stakeNegative+=data;
-      if (data <= 10000)
-      {
-        range_d10k++;
-      }
-      else if (data <= 50000)
-      {
-        range_d50k++;
-      }
-      else if (data <= 100000)
-      {
-        range_d100k++;
-      }
-      else if (data <= 200000)
-      {
-        range_d200k++;
-      }
-      else if (data <= 500000)
-      {
-        range_d500k++;
-      }
-      else if (data <= 1000000)
-      {
-        range_d1mill++;
-      }
-      else if (data <= 2000000)
-      {
-        range_d2mill++;
-      }
-      else if (data <= 5000000)
-      {
-        range_d5mill++;
-      }
-      else
-      {
-        range_dremains++;
-      }
+      if (data <= 10000) range_d10k++;
+      else if (data <= 50000) range_d50k++;
+      else if (data <= 100000) range_d100k++;
+      else if (data <= 200000) range_d200k++;
+      else if (data <= 500000) range_d500k++;
+      else if (data <= 1000000) range_d1mill++;
+      else if (data <= 2000000) range_d2mill++;
+      else if (data <= 5000000) range_d5mill++;
+      else range_dremains++;
     }
     else
     {
       stakePositive+=data;
-      if (data <= 10000)
-      {
-        range_10k++;
-      }
-      else if (data <= 50000)
-      {
-        range_50k++;
-      }
-      else if (data <= 100000)
-      {
-        range_100k++;
-      }
-      else if (data <= 200000)
-      {
-        range_200k++;
-      }
-      else if (data <= 500000)
-      {
-        range_500k++;
-      }
-      else if (data <= 1000000)
-      {
-        range_1mill++;
-      }
-      else if (data <= 2000000)
-      {
-        range_2mill++;
-      }
-      else if (data <= 5000000)
-      {
-        range_5mill++;
-      }
-      else
-      {
-        range_remains++;
-      }
+      if (data <= 10000) range_10k++;
+      else if (data <= 50000) range_50k++;
+      else if (data <= 100000) range_100k++;
+      else if (data <= 200000) range_200k++;
+      else if (data <= 500000) range_500k++;
+      else if (data <= 1000000) range_1mill++;
+      else if (data <= 2000000) range_2mill++;
+      else if (data <= 5000000) range_5mill++;
+      else range_remains++;
     }
   }
 
@@ -262,21 +207,14 @@ awk '
     }
     if(lastday == substr($1, 1, 8))
     {
-      if(last_totalstakes != $2)
-      {
-        daychanges+=1;
-      }
+      if(last_totalstakes != $2) daychanges+=1;
     }
     else
     {
       line++;
       printSumm();
       resetStats();
-
-      if(last_totalstakes != $2)
-      {
-        daychanges+=1;
-      }
+      if(last_totalstakes != $2) daychanges+=1;
       lastday=substr($1, 1, 8)
       last_totalstakes=$2
     }
