@@ -84,32 +84,54 @@ awk '
 
   function printSumm()
   {
-    mydate=substr(lastday, 1, 4) "-" substr(lastday, 5, 2) "-" substr(lastday, 7, 2)
-    printf "%-10s %6s ", mydate, daychanges
-    printf "%4s\033[0m \033[41m%4s\033[0m", range_10k, range_d10k
-    printf "%4s\033[0m \033[41m%4s\033[0m", range_50k, range_d50k
-    printf "%4s\033[0m \033[41m%4s\033[0m", range_100k, range_d100k
-    printf "%4s\033[0m \033[41m%4s\033[0m", range_200k, range_d200k
-    printf "%4s\033[0m \033[41m%4s\033[0m", range_500k, range_d500k
-    printf "%4s\033[0m \033[41m%4s\033[0m", range_1mill, range_d1mill
-    printf "%4s\033[0m \033[41m%4s\033[0m", range_2mill, range_d2mill
-    printf "%4s\033[0m \033[41m%4s\033[0m", range_5mill, range_d5mill
-    printf "%4s\033[0m \033[41m%4s\033[0m", range_remains, range_dremains
-    printf "\n"
+    if(line % 2 == 0)
+    {
+      mydate=substr(lastday, 1, 4) "-" substr(lastday, 5, 2) "-" substr(lastday, 7, 2)
+      printf "%-10s", mydate
+      printf "%4s\033[0m", (range_10k + range_50k + range_100k + range_200k + range_500k + range_1mill + range_2mill + range_5mill + range_remains)
+      printf "\033[41m%4s\033[0m", (range_d10k + range_d50k + range_d100k + range_d200k + range_d500k + range_d1mill + range_d2mill + range_d5mill + range_dremains)
+      printf "%4s\033[0m\033[41m%4s\033[0m", range_10k, range_d10k
+      printf "%4s\033[0m\033[41m%4s\033[0m", range_50k, range_d50k
+      printf "%4s\033[0m\033[41m%4s\033[0m", range_100k, range_d100k
+      printf "%4s\033[0m\033[41m%4s\033[0m", range_200k, range_d200k
+      printf "%4s\033[0m\033[41m%4s\033[0m", range_500k, range_d500k
+      printf "%4s\033[0m\033[41m%4s\033[0m", range_1mill, range_d1mill
+      printf "%4s\033[0m\033[41m%4s\033[0m", range_2mill, range_d2mill
+      printf "%4s\033[0m\033[41m%4s\033[0m", range_5mill, range_d5mill
+      printf "%4s\033[0m\033[41m%4s\033[0m", range_remains, range_dremains
+      printf "\n"
+    }
+    else
+    {
+      mydate=substr(lastday, 1, 4) "-" substr(lastday, 5, 2) "-" substr(lastday, 7, 2)
+      printf "\033[4;5;82m%-10s\033[0m", mydate
+      printf "\033[1;30;47m%4s\033[0m", (range_10k + range_50k + range_100k + range_200k + range_500k + range_1mill + range_2mill + range_5mill + range_remains)
+      printf "\033[41m%4s\033[0m", (range_d10k + range_d50k + range_d100k + range_d200k + range_d500k + range_d1mill + range_d2mill + range_d5mill + range_dremains)
+      printf "\033[1;30;47m%4s\033[0m\033[41m%4s\033[0m", range_10k, range_d10k
+      printf "\033[1;30;47m%4s\033[0m\033[41m%4s\033[0m", range_50k, range_d50k
+      printf "\033[1;30;47m%4s\033[0m\033[41m%4s\033[0m", range_100k, range_d100k
+      printf "\033[1;30;47m%4s\033[0m\033[41m%4s\033[0m", range_200k, range_d200k
+      printf "\033[1;30;47m%4s\033[0m\033[41m%4s\033[0m", range_500k, range_d500k
+      printf "\033[1;30;47m%4s\033[0m\033[41m%4s\033[0m", range_1mill, range_d1mill
+      printf "\033[1;30;47m%4s\033[0m\033[41m%4s\033[0m", range_2mill, range_d2mill
+      printf "\033[1;30;47m%4s\033[0m\033[41m%4s\033[0m", range_5mill, range_d5mill
+      printf "\033[1;30;47m%4s\033[0m\033[41m%4s\033[0m", range_remains, range_dremains
+      printf "\n"
+    }
   }
 
   function printHeader()
   {
-    printf "%-10s %6s ", "Date", "Moves"
-    printf "%-9s", "  <= 10k"
-    printf "%-9s", "  <= 50k"
-    printf "%-9s", " <= 100k"
-    printf "%-9s", " <= 200k"
-    printf "%-9s", " <= 500k"
-    printf "%-9s", " <= 1mil"
-    printf "%-9s", " <= 2mil"
-    printf "%-9s", " <= 5mil"
-    printf "%-9s", "  > 5mil"
+    printf "\033[4;5;82m%-10s\033[0m\033[30;47m%8s\033[0m", "Date", "Moves"
+    printf "\033[4;5;82m%-8s\033[0m", " <= 10k"
+    printf "\033[30;47m%-8s\033[0m", " <= 50k"
+    printf "\033[4;5;82m%-8s\033[0m", "<= 100k"
+    printf "\033[30;47m%-8s\033[0m", "<= 200k"
+    printf "\033[4;5;82m%-8s\033[0m", "<= 500k"
+    printf "\033[30;47m%-8s\033[0m", "<= 1mil"
+    printf "\033[4;5;82m%-8s\033[0m", "<= 2mil"
+    printf "\033[30;47m%-8s\033[0m", "<= 5mil"
+    printf "\033[4;5;82m%-8s\033[0m", " > 5mil"
     printf "\n"
   }
 
@@ -225,6 +247,7 @@ awk '
   {
     if(NR == 1)
     {
+      line=1;
       resetStats()
       lastday=substr($1, 1, 8)
       last_totalstakes=$2
@@ -239,6 +262,7 @@ awk '
     }
     else
     {
+      line++;
       printSumm();
       resetStats();
 
@@ -253,15 +277,7 @@ awk '
     last_totalstakes=$2
   }
   END {
+    line++;
     printSumm();
-  #printf "\033[0;33m%-9s: Last %s day(s) from %s\033[0m\n", "Summary",  total_rows, tilldate
-  #printf "\033[0;32m%-9s:\033[0m \033[30;48;5;82m%8.4f\033[0m%% ", "Online", (tot_online / tot_cnt)*100
-  #printf "\033[30;48;5;82m%6s\033[0m\n", tot_online
-  #printf "\033[0;31m%-9s:\033[0m \033[41m%8.4f\033[0m%% ", "Offline", (tot_offline / tot_cnt)*100
-  #printf "\033[4;41;82m%6s\033[0m\n", tot_offline
-  #printf "\033[0;34m%-9s:\033[0m \033[4;5;82m%8.4f\033[0m%% ", "No status", (tot_nostatus / tot_cnt)*100
-  #printf "\033[4;5;82m%6s\033[0m\n", tot_nostatus
-  #printf "\033[0;36m%-9s:\033[0m \033[4;5;82m%8.4f\033[0m%% ", "Miss", ((tot_cnt - tot_online - tot_offline - tot_nostatus) / tot_cnt)*100
-  #printf "\033[4;5;82m%6s\033[0m\n\n", (tot_cnt - tot_online - tot_offline - tot_nostatus)
   }
 ' "tilldate=$tilldate" <<< "$result"
