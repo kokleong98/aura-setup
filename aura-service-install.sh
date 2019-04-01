@@ -87,7 +87,7 @@ initConfiguration()
   [ -z "\$rpc_option" ] && rpc_option=0
   [ -z "\$rpc_url" ] && rpc_url=""
   #statistics logging option
-  [ -z "\$stats_option" ] && stats_option=0
+  [ -z "\$stats_option" ] && stats_option=1
 }
 
 printConfiguration()
