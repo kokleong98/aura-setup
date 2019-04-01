@@ -37,13 +37,13 @@ do
     }
 
     # Load all fields of each record into recs.
-    BEGIN{FS="[{},:\"]+"}
+    BEGIN{FS="[{},:]+"}
     {
       totalcol=0
 
       for (i = 3; i <= NF; i+=2)
       {
-        recs[NR, $(i-1)] = $i;
+        recs[NR, substr($(i-1), 2, length($(i-1))-2)] = substr($i, 2, length($i)-2);
         totalcol+=1;
       }
       if (NR == 1)
