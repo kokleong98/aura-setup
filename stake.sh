@@ -79,7 +79,7 @@ awk '
     if(line % 2 == 0)
     {
       mydate=substr(lastday, 1, 4) "-" substr(lastday, 5, 2) "-" substr(lastday, 7, 2)
-      printf "%-10s", mydate;
+      printf "\033[4;5;82m%-10s\033[0m", mydate;
       printf "%4s\033[0m", (range_10k + range_50k + range_100k + range_200k + range_500k + range_1mill + range_2mill + range_5mill + range_remains);
       printf "\033[41m%4s\033[0m", (range_d10k + range_d50k + range_d100k + range_d200k + range_d500k + range_d1mill + range_d2mill + range_d5mill + range_dremains);
       printf "%8.3f\033[0m\033[41m%8.3f\033[0m", stakePositive / 1000000, stakeNegative / 1000000;
@@ -226,7 +226,7 @@ awk '
       day_min=$2
       day_max=$2
     }
-    calcStats(last_totalstakes - $2);
+    calcStats($2 - last_totalstakes);
     if($2 > day_max) day_max = $2;
     if($2 < day_min) day_min = $2;
     last_totalstakes=$2;
