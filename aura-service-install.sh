@@ -131,7 +131,7 @@ fetchAuradLogs()
 
 fetchAuradStatus()
 {
-  logs_aurad=\$(aura status)
+  logs_aurad=\$(timeout 15s aura status)
   if [ -z "\$logs_aurad" ]; then
     stat_status=""
     stat_reason=""
