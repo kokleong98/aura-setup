@@ -112,6 +112,7 @@ awk '
       printf "\033[1;30;47m%4s\033[0m\033[41m%4s\033[0m", range_remains, range_dremains
       printf "\n"
     }
+    printf "Min: %8.3f, Max: %8.3f, Start: %8.3f, End: %8.3f\n", day_min, day_max, day_start, day_end;
   }
 
   function printHeader()
@@ -155,6 +156,10 @@ awk '
     range_d2mill=0
     range_d5mill=0
     range_dremains=0
+    day_min=0
+    day_max=0
+    day_start=0
+    day_end=0
   }
 
   function calcStats(data)
@@ -196,12 +201,17 @@ awk '
       resetStats();
       lastday=substr($1, 1, 8);
       last_totalstakes=$2;
+      day_start=$2
+      day_end=$2
+      day_min=$2
+      day_max=$2
       printHeader();
     }
 
     if(lastday == substr($1, 1, 8))
     {
       if(last_totalstakes != $2) daychanges+=1;
+      day_end=$2
     }
     else
     {
@@ -211,8 +221,14 @@ awk '
       if(last_totalstakes != $2) daychanges+=1;
       lastday=substr($1, 1, 8);
       last_totalstakes=$2;
+      day_start=$2
+      day_end=$2
+      day_min=$2
+      day_max=$2
     }
     calcStats(last_totalstakes - $2);
+    if($2 > day_max) day_max = $2;
+    if($2 < day_min) day_min = $2;
     last_totalstakes=$2;
   }
   END {
