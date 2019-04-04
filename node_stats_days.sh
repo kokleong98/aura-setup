@@ -1,6 +1,12 @@
 #!/bin/bash
 DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 
+json=0
+if [ $# -eq 4 ] && [ $3 == "json" ]; then
+  json=1
+  dest=$4
+fi
+
 if [ -z "$1" ]; then
   days="1"
 else
@@ -88,36 +94,8 @@ do
 done
 
 awk '
-BEGIN{FS=","}
+function printSummary()
 {
-  printf "\033[0;33mDate: %s-%s-%s\033[0m\n", substr($1, length($1) - 11, 4), substr($1, length($1) - 7, 2), substr($1, length($1) - 5, 2)
-  printf "\033[0;32mOnline:\033[0m \033[30;48;5;82m%8.4f\033[0m%% ", $6
-  printf "\033[4;5;82m%4s\033[0m ", $3
-  if ($4 == "")
-  {
-    printf "\033[0;31mOffline:\033[0m \033[41m%4s\033[0m ", 0
-  }
-  else
-  {
-    printf "\033[0;31mOffline:\033[0m \033[41m%4s\033[0m ", $4
-  }
-  if ($5 == "")
-  {
-    printf "\033[0;34mNo status:\033[0m \033[4;5;82m%4s\033[0m ", 0
-  }
-  else
-  {
-    printf "\033[0;34mNo status:\033[0m \033[4;5;82m%4s\033[0m ", $5
-  }
-  printf "\033[0;35mEst.:\033[0m \033[4;5;82m%4s\033[0m ", $2
-  printf "\033[0;36mMiss:\033[0m \033[4;5;82m%4s\033[0m\n\n", $2 - $3 - $4
-  tot_cnt+=$2
-  tot_online+=$3
-  tot_offline+=$4
-  tot_nostatus+=$5
-  total_rows++;
-}
-END {
   printf "\033[0;33m%-9s: Last %s day(s) from %s\033[0m\n", "Summary",  total_rows, tilldate
   printf "\033[0;32m%-9s:\033[0m \033[30;48;5;82m%8.4f\033[0m%% ", "Online", (tot_online / tot_cnt)*100
   printf "\033[30;48;5;82m%6s\033[0m\n", tot_online
@@ -128,4 +106,72 @@ END {
   printf "\033[0;36m%-9s:\033[0m \033[4;5;82m%8.4f\033[0m%% ", "Miss", ((tot_cnt - tot_online - tot_offline - tot_nostatus) / tot_cnt)*100
   printf "\033[4;5;82m%6s\033[0m\n\n", (tot_cnt - tot_online - tot_offline - tot_nostatus)
 }
-' "tilldate=$tilldate" <<< "$result"
+
+function printJson()
+{
+
+}
+
+BEGIN{FS=","}
+{
+  if( json == 0)
+  {
+    printf "\033[0;33mDate: %s-%s-%s\033[0m\n", substr($1, length($1) - 11, 4), substr($1, length($1) - 7, 2), substr($1, length($1) - 5, 2)
+    printf "\033[0;32mOnline:\033[0m \033[30;48;5;82m%8.4f\033[0m%% ", $6
+    printf "\033[4;5;82m%4s\033[0m ", $3
+    if ($4 == "")
+    {
+      printf "\033[0;31mOffline:\033[0m \033[41m%4s\033[0m ", 0
+    }
+    else
+    {
+      printf "\033[0;31mOffline:\033[0m \033[41m%4s\033[0m ", $4
+    }
+    if ($5 == "")
+    {
+      printf "\033[0;34mNo status:\033[0m \033[4;5;82m%4s\033[0m ", 0
+    }
+    else
+    {
+      printf "\033[0;34mNo status:\033[0m \033[4;5;82m%4s\033[0m ", $5
+    }
+    printf "\033[0;35mEst.:\033[0m \033[4;5;82m%4s\033[0m ", $2
+    printf "\033[0;36mMiss:\033[0m \033[4;5;82m%4s\033[0m\n\n", $2 - $3 - $4
+  }
+  else
+  {
+    json_filename=dest "stat_" substr($1, length($1) - 11, 4) "_" substr($1, length($1) - 7, 2) "_" substr($1, length($1) - 5, 2) ".json"
+    printf "%s\n", json_filename
+    content="{" "\"Date\":\"" substr($1, length($1) - 11, 4) "-" substr($1, length($1) - 7, 2) "-" substr($1, length($1) - 5, 2) "T00:00:00.000Z" "\""
+    content=content ",\"Online\":" $3
+    if ($4 == "")
+    {
+      content=content ",\"Offline\":0"
+    }
+    else
+    {
+      content=content ",\"Offline\":" $4
+    }
+    if ($5 == "")
+    {
+      content=content ",\"NoStatus\":0"
+    }
+    else
+    {
+      content=content ",\"NoStatus\":" $5
+    }
+    content=content ",\"Est\":" $2
+    content=content ",\"Miss\":" ($2 - $3 - $4) "}"
+    print content > ""json_filename""
+  }
+
+  tot_cnt+=$2
+  tot_online+=$3
+  tot_offline+=$4
+  tot_nostatus+=$5
+  total_rows++;
+}
+END {
+  if (json == 0) printSummary();
+}
+' "tilldate=$tilldate" "json=$json" "dest=$dest" <<< "$result"
