@@ -339,10 +339,14 @@ logStatistics()
 
 startAura()
 {
-  if [ \$rpc_option -eq 1 ] && [ ! -z "\$rpc_url" ]; then
-    aura start --rpc "\$rpc_url"
+  if [[ \$(docker ps --format "{{.Names}}"  --filter status=running | grep -c "docker_aurad_1") -lt 1 ]]; then
+    if [ \$rpc_option -eq 1 ] && [ ! -z "\$rpc_url" ]; then
+      aura start --rpc "\$rpc_url"
+    else
+      aura start
+    fi
   else
-    aura start
+    echo "Aurad container existed. Running on attach mode."
   fi
 }
 
@@ -439,8 +443,13 @@ sudo chmod +x aura-start.sh
 #########################################
 cat > aura-stop.sh << EOF
 #!/bin/bash
-source /home/$username/.nvm/nvm.sh
-aura stop
+DIR="\$( cd "\$( dirname "\${BASH_SOURCE[0]}" )" && pwd )"
+
+if [ -f "\${DIR}/aurad.detach" ]; then
+  echo "Aura monitor detached."
+else
+  aura stop
+fi
 EOF
 
 sudo chmod +x aura-stop.sh
