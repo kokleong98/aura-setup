@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <title>Aura monitor</title>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.8.0/Chart.js"></script>
+  <script defer src="https://use.fontawesome.com/releases/v5.8.1/js/all.js" integrity="sha384-g5uSoOSBd7KkhAMlnQILrecXvzst9TdC09/VM+pjDTCM+1il8RHz5fKANTFFb+gQ" crossorigin="anonymous"></script>
+</head>
+<body>
+  <nav class="navbar navbar-expand-sm bg-dark navbar-dark">
+    <a class="navbar-brand" href="#"><i class="fas fa-desktop"></i> AURA-M</i></a>
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#collapsibleNavbar">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+
+    <div class="collapse navbar-collapse" id="collapsibleNavbar">
+        <ul class="navbar-nav">
+          <li class="nav-item">
+            <a class="nav-link active" data-toggle="tab" href="#status"><i class="fas fa-wifi"></i> Status</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" data-toggle="tab" href="#history"><i class="fas fa-history"></i> History</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" data-toggle="tab" href="#about"><i class="fas fa-code"></i> About</a>
+          </li>    
+        </ul>
+      </div> 
+  </nav>
+
+  <div class="tab-content">
+      <div id="status" class="container tab-pane active"><br>
+        <canvas id="myChart" width="200" height="200"></canvas>
+        <script>
+
+          
+          var options = null;
+
+          var data = {
+              datasets: [
+                {
+                  data: [10, 20, 30]
+                }
+              ],
+
+              // These labels appear in the legend and in the tooltips when hovering different arcs
+              labels: [
+                  'Red',
+                  'Yellow',
+                  'Blue'
+              ],
+
+              backgroundColor: ["#3e95cd", "#8e5ea2","#3cba9f","#e8c3b9"]
+          };
+          var ctx = document.getElementById('myChart').getContext('2d');
+          var myDoughnutChart = new Chart(ctx, {
+              type: 'doughnut',
+              data: {
+                labels: ["Africa", "Asia", "Europe", "Latin America", "North America"],
+                datasets: [
+                  {
+                    label: "Population (millions)",
+                    backgroundColor: ["#3e95cd", "#8e5ea2","#3cba9f","#e8c3b9","#c45850"],
+                    data: [2478,5267,734,784,433]
+                  }
+                ]
+              },
+              options: {
+                title: {
+                  display: true,
+                  text: 'Predicted world population (millions) in 2050'
+                }
+              }
+          });
+        </script>
+      </div>
+      <div id="history" class="container tab-pane fade"><br>
+        <h3>History</h3>
+        <p>Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.</p>
+      </div>
+      <div id="about" class="container tab-pane fade"><br>
+        <h3>About</h3>
+        <p>Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam.</p>
+      </div>
+    </div>
+</body>
+</html>
