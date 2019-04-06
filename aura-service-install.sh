@@ -233,7 +233,10 @@ waitAuradBlockSync()
     sleep 50
   done
   #Extra wait time for aurad container to active running
-  sleep 30
+  blockdiff=\$((blocknum - processingblock))
+  if [[ \$blockdiff -gt 0 ]]; then
+    sleep \$((blockdiff * 5))
+  fi
 }
 
 checkAuradPackageVersion()
