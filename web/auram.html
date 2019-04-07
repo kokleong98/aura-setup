@@ -10,82 +10,140 @@
   <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.8.0/Chart.js"></script>
   <script defer src="https://use.fontawesome.com/releases/v5.8.1/js/all.js" integrity="sha384-g5uSoOSBd7KkhAMlnQILrecXvzst9TdC09/VM+pjDTCM+1il8RHz5fKANTFFb+gQ" crossorigin="anonymous"></script>
+  <style>
+      .nav-tabs>li>a {
+        background-color: transparent;
+        border-color: transparent;
+        color: #FFFFFF;
+      }
+    </style>
 </head>
 <body>
   <nav class="navbar navbar-expand-sm bg-dark navbar-dark">
     <a class="navbar-brand" href="#"><i class="fas fa-desktop"></i> AURA-M</i></a>
-    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#collapsibleNavbar">
-      <span class="navbar-toggler-icon"></span>
-    </button>
-
-    <div class="collapse navbar-collapse" id="collapsibleNavbar">
-        <ul class="navbar-nav">
-          <li class="nav-item">
-            <a class="nav-link active" data-toggle="tab" href="#status"><i class="fas fa-wifi"></i> Status</a>
-          </li>
-          <li class="nav-item">
-            <a class="nav-link" data-toggle="tab" href="#history"><i class="fas fa-history"></i> History</a>
-          </li>
-          <li class="nav-item">
-            <a class="nav-link" data-toggle="tab" href="#about"><i class="fas fa-code"></i> About</a>
-          </li>    
-        </ul>
-      </div> 
+    <ul class="nav nav-tabs">
+      <li class="nav-item  bg-dark navbar-dark">
+        <a class="nav-link active" data-toggle="tab" href="#status"><i class="fas fa-wifi"></i> Now</a>
+      </li>
+      <li class="nav-item bg-dark navbar-dark">
+        <a class="nav-link" data-toggle="tab" href="#history"><i class="fas fa-history"></i> Past</a>
+      </li>
+      <li class="nav-item bg-dark navbar-dark">
+        <a class="nav-link" data-toggle="tab" href="#about"><i class="fas fa-code"></i> About</a>
+      </li>    
+    </ul>
   </nav>
 
   <div class="tab-content">
       <div id="status" class="container tab-pane active"><br>
-        <canvas id="myChart" width="200" height="200"></canvas>
+        <canvas id="myChart" width="150" height="150">no data</canvas><br>
+        <table class="table table-sm table-hover">
+            <thead class="thead-dark">
+              <tr>
+                <th>Time</th>
+                <th>Event</th>
+                <th>Range</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>2019-03-01</td>
+                <td>Online</td>
+                <td>00:00 - 23:20</td>
+              </tr>
+              <tr>
+                  <td>2019-03-01</td>
+                  <td>Offline</td>
+                  <td>23:20-23:50</td>
+              </tr>
+              <tr>
+                  <td>2019-03-01</td>
+                  <td>Others</td>
+                  <td>23:50 - 23:59</td>
+              </tr>
+            </tbody>
+        </table>
+
         <script>
-
-          
-          var options = null;
-
-          var data = {
-              datasets: [
-                {
-                  data: [10, 20, 30]
-                }
-              ],
-
-              // These labels appear in the legend and in the tooltips when hovering different arcs
-              labels: [
-                  'Red',
-                  'Yellow',
-                  'Blue'
-              ],
-
-              backgroundColor: ["#3e95cd", "#8e5ea2","#3cba9f","#e8c3b9"]
-          };
           var ctx = document.getElementById('myChart').getContext('2d');
           var myDoughnutChart = new Chart(ctx, {
               type: 'doughnut',
               data: {
-                labels: ["Africa", "Asia", "Europe", "Latin America", "North America"],
+                labels: ["Online", "Offline", "Others"],
                 datasets: [
                   {
-                    label: "Population (millions)",
-                    backgroundColor: ["#3e95cd", "#8e5ea2","#3cba9f","#e8c3b9","#c45850"],
-                    data: [2478,5267,734,784,433]
+                    label: "Node status (minutes)",
+                    backgroundColor: ["lawngreen", "Red","Orange"],
+                    data: [1400,30,10]
                   }
                 ]
               },
               options: {
+                layout: {
+                  padding: {
+                      left: 0,
+                      right: 0,
+                      top: 0,
+                      bottom: 0
+                  }
+                },
                 title: {
                   display: true,
-                  text: 'Predicted world population (millions) in 2050'
-                }
+                  text: 'Node staking status (minutes)'
+                },
+                circumference: Math.PI,
+                rotation: -Math.PI,
+                animation: {
+                  animateScale: false
+                }	
               }
           });
+          
         </script>
       </div>
       <div id="history" class="container tab-pane fade"><br>
-        <h3>History</h3>
-        <p>Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.</p>
+        <p>Past data to display here.</p>
       </div>
       <div id="about" class="container tab-pane fade"><br>
-        <h3>About</h3>
-        <p>Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam.</p>
+        <div id="aboutcard">
+          <div class="card">
+            <div class="card-header" id="appinfo">
+                <button class="btn btn-link" data-toggle="collapse" data-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne">AURA-M</button>
+            </div>
+        
+            <div id="collapseOne" class="collapse show" aria-labelledby="appinfo" data-parent="#aboutcard">
+              <div class="card-body">
+                  <p>This is an add-on dashboard to Aura monitoring service and require statistics collection and post process to be turn-on.</p>
+                  <p>Source: <a href="https://github.com/kokleong98/aura-setup/"><i class="fab fa-github fa-2x"></i> GitHub</a></p>
+              </div>
+            </div>
+          </div>
+
+          <div class="card">
+              <div class="card-header" id="authorinfo">
+                <h5 class="mb-0">
+                  <button class="btn btn-link" data-toggle="collapse" data-target="#collapseTwo" aria-expanded="true" aria-controls="collapseTwo">Author</button>
+                </h5>
+              </div>
+          
+              <div id="collapseTwo" class="collapse show" aria-labelledby="authorinfo" data-parent="#aboutcard">
+                <div class="card-body">
+                  <table>
+                    <thead>Author: Soo Kok Leong</thead>
+                    <tr>
+                      <td rowspan="2"><img width="100" height="100" src="https://cdn.discordapp.com/avatars/432384295450050560/0ed9aa6ca18236ad006bd9bc535e4e46.png"></td>
+                      <td></td>
+                    </tr>
+                    <tr>
+                        <td></td>
+                        <td><a href="https://www.linkedin.com/in/soo-kok-leong-a6634842/"><i class="fab fa-linkedin fa-2x"></i> LinkedIn</a></td>
+                        <td><a href="https://discordapp.com/channels/432384295450050560/"><i class="fab fa-discord fa-2x"> </i>Discord</a></td>
+                      </tr>
+                  </table>
+                </div>
+              </div>
+            </div>
+        </div>
       </div>
     </div>
 </body>
