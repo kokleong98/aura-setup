@@ -10,6 +10,81 @@
   <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.8.0/Chart.js"></script>
   <script defer src="https://use.fontawesome.com/releases/v5.8.1/js/all.js" integrity="sha384-g5uSoOSBd7KkhAMlnQILrecXvzst9TdC09/VM+pjDTCM+1il8RHz5fKANTFFb+gQ" crossorigin="anonymous"></script>
+  <script>
+    function clearCanvas(id, msg){
+      var canvas = document.getElementById(id);
+      var ctx = canvas.getContext("2d");
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+      ctx.font = "30px Arial";
+      ctx.textAlign = "center";
+      if(msg.length > 0)
+        ctx.fillText(msg, canvas.width / 2, canvas.height / 2);
+    }
+
+    function insertTableRow(id, index, result)
+    {
+      var table = document.getElementById(id);
+      var row = table.insertRow(index);
+      var cell1 = row.insertCell(0);
+      var cell2 = row.insertCell(1);
+      var cell3 = row.insertCell(2);
+      var d = new Date(result.Date);
+      cell1.innerHTML = d.getUTCFullYear() + "-" + (d.getUTCMonth()+1) + "-" + d.getUTCDate();
+      cell2.innerHTML = result.Online;
+      cell2.innerHTML = result.Offline;
+    }
+
+    function downloadData(uri, func){
+      return $.getJSON(uri).then(func);
+    }
+
+    function buildChart(data){
+      var mydata = [data.Online,data.Offline,data.Miss + data.NoStatus];
+
+      var ctx = document.getElementById('myChart').getContext('2d');
+        var myDoughnutChart = new Chart(ctx, {
+            type: 'doughnut',
+            data: {
+              labels: ["Online", "Offline", "Others"],
+              datasets: [
+                {
+                  label: "Node status (minutes)",
+                  backgroundColor: ["lawngreen", "Red","Orange"],
+                  data: mydata
+                }
+              ]
+            },
+            options: {
+              title: {
+                display: true,
+                text: 'Node staking status (minutes)'
+              },
+              circumference: Math.PI,
+              rotation: -Math.PI,
+              animation: {
+                animateScale: false
+              }	
+            }
+        });
+    }
+
+    function handleChartData(){
+      var d = new Date();
+      var mo = ("0" + (d.getUTCMonth()+1));
+      mo = mo.length > 2 ? mo.slice(1) : mo;
+      var date = ("0" + d.getUTCDate());
+      date = date.length > 2 ? date.slice(1) : date;
+      var uri = "data/stat_" + d.getUTCFullYear() + "_" + mo + "_" + date + ".json";
+      clearCanvas("myChart", "Loading Data.");
+      downloadData(uri, buildChart);
+    }
+
+    $(document).ready(function(){
+      clearCanvas("myChart", "No Data.");
+      handleChartData();
+      setInterval(handleChartData, 60000);
+    });
+  </script>
   <style>
       .nav-tabs>li>a {
         background-color: transparent;
@@ -23,10 +98,10 @@
     <a class="navbar-brand" href="#"><i class="fas fa-desktop"></i> AURA-M</i></a>
     <ul class="nav nav-tabs">
       <li class="nav-item  bg-dark navbar-dark">
-        <a class="nav-link active" data-toggle="tab" href="#status"><i class="fas fa-wifi"></i> Now</a>
+        <a class="nav-link active" data-toggle="tab" href="#status"  onclick="handleChartData()"><i class="fas fa-wifi"></i> Now</a>
       </li>
       <li class="nav-item bg-dark navbar-dark">
-        <a class="nav-link" data-toggle="tab" href="#history"><i class="fas fa-history"></i> Past</a>
+        <a class="nav-link" data-toggle="tab" href="#history"><i class="fas fa-history" id=""></i> Past</a>
       </li>
       <li class="nav-item bg-dark navbar-dark">
         <a class="nav-link" data-toggle="tab" href="#about"><i class="fas fa-code"></i> About</a>
@@ -36,8 +111,8 @@
 
   <div class="tab-content">
       <div id="status" class="container tab-pane active"><br>
-        <canvas id="myChart" width="150" height="150">no data</canvas><br>
-        <table class="table table-sm table-hover">
+        <canvas id="myChart" width="200" height="200"></canvas><br>
+        <table class="table table-sm table-hover" id="logs">
             <thead class="thead-dark">
               <tr>
                 <th>Time</th>
@@ -45,7 +120,7 @@
                 <th>Range</th>
               </tr>
             </thead>
-            <tbody>
+            <tbody id="lbody">
               <tr>
                 <td>2019-03-01</td>
                 <td>Online</td>
@@ -65,40 +140,6 @@
         </table>
 
         <script>
-          var ctx = document.getElementById('myChart').getContext('2d');
-          var myDoughnutChart = new Chart(ctx, {
-              type: 'doughnut',
-              data: {
-                labels: ["Online", "Offline", "Others"],
-                datasets: [
-                  {
-                    label: "Node status (minutes)",
-                    backgroundColor: ["lawngreen", "Red","Orange"],
-                    data: [1400,30,10]
-                  }
-                ]
-              },
-              options: {
-                layout: {
-                  padding: {
-                      left: 0,
-                      right: 0,
-                      top: 0,
-                      bottom: 0
-                  }
-                },
-                title: {
-                  display: true,
-                  text: 'Node staking status (minutes)'
-                },
-                circumference: Math.PI,
-                rotation: -Math.PI,
-                animation: {
-                  animateScale: false
-                }	
-              }
-          });
-          
         </script>
       </div>
       <div id="history" class="container tab-pane fade"><br>
@@ -108,7 +149,7 @@
         <div id="aboutcard">
           <div class="card">
             <div class="card-header" id="appinfo">
-                <button class="btn btn-link" data-toggle="collapse" data-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne">AURA-M</button>
+                <button class="btn btn-link" data-toggle="collapse" data-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne"><i class="fas fa-info-circle"></i> AURA-M</button>
             </div>
         
             <div id="collapseOne" class="collapse show" aria-labelledby="appinfo" data-parent="#aboutcard">
@@ -122,22 +163,20 @@
           <div class="card">
               <div class="card-header" id="authorinfo">
                 <h5 class="mb-0">
-                  <button class="btn btn-link" data-toggle="collapse" data-target="#collapseTwo" aria-expanded="true" aria-controls="collapseTwo">Author</button>
+                  <button class="btn btn-link" data-toggle="collapse" data-target="#collapseTwo" aria-expanded="true" aria-controls="collapseTwo"><i class="fas fa-at"></i> Author</button>
                 </h5>
               </div>
           
-              <div id="collapseTwo" class="collapse show" aria-labelledby="authorinfo" data-parent="#aboutcard">
+              <div id="collapseTwo" class="collapse" aria-labelledby="authorinfo" data-parent="#aboutcard">
                 <div class="card-body">
-                  <table>
-                    <thead>Author: Soo Kok Leong</thead>
+                  <table class="table table-bordered table-striped text-center">
+                    <thead align="center">Author: Soo Kok Leong</thead>
                     <tr>
-                      <td rowspan="2"><img width="100" height="100" src="https://cdn.discordapp.com/avatars/432384295450050560/0ed9aa6ca18236ad006bd9bc535e4e46.png"></td>
-                      <td></td>
+                      <td colspan="2" align="center"><img width="100" height="100" src="https://cdn.discordapp.com/avatars/432384295450050560/0ed9aa6ca18236ad006bd9bc535e4e46.png"></td>
                     </tr>
                     <tr>
-                        <td></td>
-                        <td><a href="https://www.linkedin.com/in/soo-kok-leong-a6634842/"><i class="fab fa-linkedin fa-2x"></i> LinkedIn</a></td>
-                        <td><a href="https://discordapp.com/channels/432384295450050560/"><i class="fab fa-discord fa-2x"> </i>Discord</a></td>
+                        <td align="center"><a href="https://www.linkedin.com/in/soo-kok-leong-a6634842/"><i class="fab fa-linkedin fa-2x"></i> LinkedIn</a></td>
+                        <td align="center"><a href="https://discordapp.com/channels/432384295450050560/"><i class="fab fa-discord fa-2x"></i> Discord</a></td>
                       </tr>
                   </table>
                 </div>
