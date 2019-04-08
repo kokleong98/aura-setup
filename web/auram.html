@@ -11,6 +11,19 @@
   <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.8.0/Chart.js"></script>
   <script defer src="https://use.fontawesome.com/releases/v5.8.1/js/all.js" integrity="sha384-g5uSoOSBd7KkhAMlnQILrecXvzst9TdC09/VM+pjDTCM+1il8RHz5fKANTFFb+gQ" crossorigin="anonymous"></script>
   <script>
+
+    function humanRead(value)
+    {
+      if(value < 60)
+      {
+        return value + " min(s)";
+      }
+      else
+      {
+        return (value / 60).toFixed(2) + " hour(s)";
+      }
+    }
+
     function clearCanvas(id, msg){
       var canvas = document.getElementById(id);
       var ctx = canvas.getContext("2d");
@@ -39,6 +52,18 @@
     }
 
     function buildChart(data){
+      var d = new Date();
+      var mo = ("0" + (d.getUTCMonth()+1));
+      mo = mo.length > 2 ? mo.slice(1) : mo;
+      var date = ("0" + d.getUTCDate());
+      date = date.length > 2 ? date.slice(1) : date;
+      var today = d.getUTCFullYear() + "-" + mo + "-" + date;
+
+      $("#txtOn").html(humanRead(data.Online) + " (" + ((data.Online / data.Est)*100).toFixed(4)  + "%)");
+      $("#txtOff").html(humanRead(data.Offline) + " (" + ((data.Offline / data.Est)*100).toFixed(4) + "%)");
+      $("#txtOth").html(humanRead(data.Miss + data.NoStatus) + " (" + (((data.Miss + data.NoStatus)/data.Est)*100).toFixed(4) + "%)");
+      $("#dayprogress").css("width", ((data.Est / 1440)*100).toFixed(2) + "%");
+      $("#dayprogress").html(((data.Est / 1440)*100).toFixed(2) + "% of " + today);
       var mydata = [data.Online,data.Offline,data.Miss + data.NoStatus];
 
       var ctx = document.getElementById('myChart').getContext('2d');
@@ -110,8 +135,16 @@
   </nav>
 
   <div class="tab-content">
-      <div id="status" class="container tab-pane active"><br>
+      <div id="status" class="container tab-pane active">
         <canvas id="myChart" width="200" height="200"></canvas><br>
+        <div class="progress" style="height:20px">
+            <div class="progress-bar" id="dayprogress" style="width:0%;height:20px">no data.</div>
+        </div><br>
+        <div class="row d-flex justify-content-center">
+          <div class="bg-success text-white text-center pr-2 pl-2" id="txtOn">no data.</div>
+          <div class="bg-danger text-white text-center pr-2 pl-2" id="txtOff">no data.</div>
+          <div class="bg-warning text-white text-center pr-2 pl-2" id="txtOth">no data.</div>
+        </div><br>
         <table class="table table-sm table-hover" id="logs">
             <thead class="thead-dark">
               <tr>
@@ -121,21 +154,6 @@
               </tr>
             </thead>
             <tbody id="lbody">
-              <tr>
-                <td>2019-03-01</td>
-                <td>Online</td>
-                <td>00:00 - 23:20</td>
-              </tr>
-              <tr>
-                  <td>2019-03-01</td>
-                  <td>Offline</td>
-                  <td>23:20-23:50</td>
-              </tr>
-              <tr>
-                  <td>2019-03-01</td>
-                  <td>Others</td>
-                  <td>23:50 - 23:59</td>
-              </tr>
             </tbody>
         </table>
 
