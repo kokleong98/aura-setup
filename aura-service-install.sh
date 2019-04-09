@@ -338,6 +338,11 @@ logStatistics()
     mkdir "\${DIR}/stats"
   fi
   cat >> "\${DIR}/stats/\${stat_time:0:8}.txt" <<< "\$logline"
+  
+  if [ ! -d "\${DIR}/web/data/" ]; then
+    mkdir -p "\${DIR}/web/data/"
+  fi
+  "\${DIR}/node_stats_days.sh" 1 "\$(date -u +%Y-%m-%d)" json "\${DIR}/web/data/"
 }
 
 startAura()
