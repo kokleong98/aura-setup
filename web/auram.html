@@ -213,58 +213,58 @@
 
           <div id="reportrange" style="background: #fff; cursor: pointer; padding: 5px 10px; border: 1px solid #ccc; width: 100%">
               <i class="fa fa-calendar-alt"></i>&nbsp;<input type="text" name="pastday" readonly />
-            </div>
+          </div>
     
-            <script>
-            $(function() {
-              $('input[name="pastday"]').daterangepicker({
-                singleDatePicker: true,
-                showDropdowns: true,
-                startDate: moment().subtract(1, 'days'),
-                endDate: moment().subtract(1, 'days')
-              }, function(start, end, label) {
-                pastdate=start;
-                var uri = "data/stat_" + start.format("YYYY_MM_DD") + ".json";
-                clearCanvas("myPastChart", "Loading Data.");
-                downloadData(uri, buildPastChart);
-              });
+          <script>
+          $(function() {
+            $('input[name="pastday"]').daterangepicker({
+              singleDatePicker: true,
+              showDropdowns: true,
+              startDate: moment().subtract(1, 'days'),
+              endDate: moment().subtract(1, 'days')
+            }, function(start, end, label) {
+              pastdate=start;
+              var uri = "data/stat_" + start.format("YYYY_MM_DD") + ".json";
+              clearCanvas("myPastChart", "Loading Data.");
+              downloadData(uri, buildPastChart);
             });
-            </script>
+          });
+          </script>
             
             <div class="row">
-                <div class="col-sm">
-                  <canvas id="myPastChart" height="225"></canvas>
+              <div class="col-sm">
+                <canvas id="myPastChart" height="225"></canvas>
+              </div>
+            </div>
+
+            <div class="row justify-content-center">
+                <i class="far fa-calendar-alt pt-1"></i> <code class="text-dark" id="pastDay">no data.</code>
+            </div>
+            <div class="row">
+              <div class="col-sm">
+                <div class="progress" style="height:20px">
+                  <div class="progress-bar" id="pastprogress" style="width:0%;height:20px">no data.</div>
                 </div>
               </div>
-              <div class="row justify-content-center">
-                  <i class="far fa-calendar-alt pt-1"></i> <code class="text-dark" id="pastDay">no data.</code>
-              </div>
-              <div class="row">
-                <div class="col-sm">
-                  <div class="progress" style="height:20px">
-                    <div class="progress-bar" id="pastprogress" style="width:0%;height:20px">no data.</div>
-                  </div>
-                </div>
-              </div>
-              <div class="row justify-content-center pt-1">
-                  <div class="bg-success text-white text-center pr-2 pl-2 small" id="txtPastOn" style="height:20px">no data.</div>
-                  <div class="bg-danger text-white text-center pr-2 pl-2 small" id="txtPastOff" style="height:20px">no data.</div>
-                  <div class="bg-warning text-white text-center pr-2 pl-2 small" id="txtPastOth" style="height:20px">no data.</div>
-              </div>
+            </div>
+            <div class="row justify-content-center pt-1">
+                <div class="bg-success text-white text-center pr-2 pl-2 small" id="txtPastOn" style="height:20px">no data.</div>
+                <div class="bg-danger text-white text-center pr-2 pl-2 small" id="txtPastOff" style="height:20px">no data.</div>
+                <div class="bg-warning text-white text-center pr-2 pl-2 small" id="txtPastOth" style="height:20px">no data.</div>
+            </div>
               
-              <div class="row pt-1">
-                  <table class="table table-sm table-hover" id="logs">
-                    <thead class="thead-dark">
-                      <tr>
-                        <th>Time</th>
-                        <th>Event</th>
-                        <th>Range</th>
-                      </tr>
-                    </thead>
-                    <tbody id="lbody">
-                    </tbody>
-                  </table>
-              </div>
+            <div class="row pt-1">
+              <table class="table table-sm table-hover" id="logs">
+                <thead class="thead-dark">
+                  <tr>
+                    <th>Time</th>
+                    <th>Event</th>
+                    <th>Range</th>
+                  </tr>
+                </thead>
+                <tbody id="lbody">
+                </tbody>
+              </table>
             </div>
 
         </div>
