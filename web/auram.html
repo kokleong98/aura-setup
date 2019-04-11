@@ -12,16 +12,8 @@
   <script defer src="https://use.fontawesome.com/releases/v5.8.1/js/all.js" integrity="sha384-g5uSoOSBd7KkhAMlnQILrecXvzst9TdC09/VM+pjDTCM+1il8RHz5fKANTFFb+gQ" crossorigin="anonymous"></script>
   <script>
 
-    function humanRead(value)
-    {
-      if(value < 60)
-      {
-        return value + " min(s)";
-      }
-      else
-      {
-        return (value / 60).toFixed(2) + " hour(s)";
-      }
+    function humanRead(value){
+      return (value < 60) ? (value + " min(s)") : (value / 60).toFixed(2) + " hour(s)";
     }
 
     function clearCanvas(id, msg){
@@ -30,12 +22,10 @@
       ctx.clearRect(0, 0, canvas.width, canvas.height);
       ctx.font = "30px Arial";
       ctx.textAlign = "center";
-      if(msg.length > 0)
-        ctx.fillText(msg, canvas.width / 2, canvas.height / 2);
+      if(msg.length > 0) ctx.fillText(msg, canvas.width / 2, canvas.height / 2);
     }
 
-    function insertTableRow(id, index, result)
-    {
+    function insertTableRow(id, index, result){
       var table = document.getElementById(id);
       var row = table.insertRow(index);
       var cell1 = row.insertCell(0);
@@ -63,34 +53,35 @@
       $("#txtOff").html(humanRead(data.Offline) + " (" + ((data.Offline / data.Est)*100).toFixed(4) + "%)");
       $("#txtOth").html(humanRead(data.Miss + data.NoStatus) + " (" + (((data.Miss + data.NoStatus)/data.Est)*100).toFixed(4) + "%)");
       $("#dayprogress").css("width", ((data.Est / 1440)*100).toFixed(2) + "%");
-      $("#dayprogress").html(((data.Est / 1440)*100).toFixed(2) + "% of " + today);
+      $("#curDay").html(today);
+      $("#dayprogress").html(((data.Est / 1440)*100).toFixed(2) + "%");
       var mydata = [data.Online,data.Offline,data.Miss + data.NoStatus];
 
       var ctx = document.getElementById('myChart').getContext('2d');
-        var myDoughnutChart = new Chart(ctx, {
-            type: 'doughnut',
-            data: {
-              labels: ["Online", "Offline", "Others"],
-              datasets: [
-                {
-                  label: "Node status (minutes)",
-                  backgroundColor: ["lawngreen", "Red","Orange"],
-                  data: mydata
-                }
-              ]
-            },
-            options: {
-              title: {
-                display: true,
-                text: 'Node staking status (minutes)'
-              },
-              circumference: Math.PI,
-              rotation: -Math.PI,
-              animation: {
-                animateScale: false
-              }	
+      var myDoughnutChart = new Chart(ctx, {
+        type: 'doughnut',
+        data: {
+          labels: ["Online", "Offline", "Others"],
+          datasets: [
+            {
+              label: "Node status (minutes)",
+              backgroundColor: ["lawngreen", "Red","Orange"],
+              data: mydata
             }
-        });
+          ]
+        },
+        options: {
+          title: {
+            display: true,
+            text: 'Node staking status (minutes)'
+          },
+          circumference: Math.PI,
+          rotation: -Math.PI,
+          animation: {
+            animateScale: false
+          }	
+        }
+      });
     }
 
     function handleChartData(){
@@ -111,14 +102,15 @@
     });
   </script>
   <style>
-      .nav-tabs>li>a {
-        background-color: transparent;
-        border-color: transparent;
-        color: #FFFFFF;
-      }
-    </style>
+    .nav-tabs>li>a {
+      background-color: transparent;
+      border-color: transparent;
+      color: #FFFFFF;
+    }
+  </style>
 </head>
 <body>
+ 
   <nav class="navbar navbar-expand-sm bg-dark navbar-dark">
     <a class="navbar-brand" href="#"><i class="fas fa-desktop"></i> AURA-M</i></a>
     <ul class="nav nav-tabs">
@@ -136,29 +128,42 @@
 
   <div class="tab-content">
       <div id="status" class="container tab-pane active">
-        <canvas id="myChart" width="200" height="200"></canvas><br>
-        <div class="progress" style="height:20px">
-            <div class="progress-bar" id="dayprogress" style="width:0%;height:20px">no data.</div>
-        </div><br>
-        <div class="row d-flex justify-content-center">
-          <div class="bg-success text-white text-center pr-2 pl-2" id="txtOn">no data.</div>
-          <div class="bg-danger text-white text-center pr-2 pl-2" id="txtOff">no data.</div>
-          <div class="bg-warning text-white text-center pr-2 pl-2" id="txtOth">no data.</div>
-        </div><br>
-        <table class="table table-sm table-hover" id="logs">
-            <thead class="thead-dark">
-              <tr>
-                <th>Time</th>
-                <th>Event</th>
-                <th>Range</th>
-              </tr>
-            </thead>
-            <tbody id="lbody">
-            </tbody>
-        </table>
-
-        <script>
-        </script>
+        <div class="container-fluid">
+          <div class="row">
+            <div class="col-sm">
+              <canvas id="myChart" height="225"></canvas>
+            </div>
+          </div>
+          <div class="row justify-content-center">
+              <i class="far fa-calendar-alt pt-1"></i> <code class="text-dark" id="curDay">no data.</code>
+          </div>
+          <div class="row">
+            <div class="col-sm">
+              <div class="progress" style="height:20px">
+                <div class="progress-bar" id="dayprogress" style="width:0%;height:20px">no data.</div>
+              </div>
+            </div>
+          </div>
+          <div class="row justify-content-center pt-1">
+              <div class="bg-success text-white text-center pr-2 pl-2 small" id="txtOn" style="height:20px">no data.</div>
+              <div class="bg-danger text-white text-center pr-2 pl-2 small" id="txtOff" style="height:20px">no data.</div>
+              <div class="bg-warning text-white text-center pr-2 pl-2 small" id="txtOth" style="height:20px">no data.</div>
+          </div>
+          
+          <div class="row pt-1">
+              <table class="table table-sm table-hover" id="logs">
+                <thead class="thead-dark">
+                  <tr>
+                    <th>Time</th>
+                    <th>Event</th>
+                    <th>Range</th>
+                  </tr>
+                </thead>
+                <tbody id="lbody">
+                </tbody>
+              </table>
+          </div>
+        </div>
       </div>
       <div id="history" class="container tab-pane fade"><br>
         <p>Past data to display here.</p>
@@ -167,39 +172,39 @@
         <div id="aboutcard">
           <div class="card">
             <div class="card-header" id="appinfo">
-                <button class="btn btn-link" data-toggle="collapse" data-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne"><i class="fas fa-info-circle"></i> AURA-M</button>
+              <button class="btn btn-link" data-toggle="collapse" data-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne"><i class="fas fa-info-circle"></i> AURA-M</button>
             </div>
         
             <div id="collapseOne" class="collapse show" aria-labelledby="appinfo" data-parent="#aboutcard">
               <div class="card-body">
-                  <p>This is an add-on dashboard to Aura monitoring service and require statistics collection and post process to be turn-on.</p>
-                  <p>Source: <a href="https://github.com/kokleong98/aura-setup/"><i class="fab fa-github fa-2x"></i> GitHub</a></p>
+                <p>This is an add-on dashboard to Aura monitoring service and require statistics collection and post process to be turn-on.</p>
+                <p>Source: <a href="https://github.com/kokleong98/aura-setup/"><i class="fab fa-github fa-2x"></i> GitHub</a></p>
               </div>
             </div>
           </div>
 
           <div class="card">
-              <div class="card-header" id="authorinfo">
-                <h5 class="mb-0">
-                  <button class="btn btn-link" data-toggle="collapse" data-target="#collapseTwo" aria-expanded="true" aria-controls="collapseTwo"><i class="fas fa-at"></i> Author</button>
-                </h5>
-              </div>
+            <div class="card-header" id="authorinfo">
+              <h5 class="mb-0">
+                <button class="btn btn-link" data-toggle="collapse" data-target="#collapseTwo" aria-expanded="true" aria-controls="collapseTwo"><i class="fas fa-at"></i> Author</button>
+              </h5>
+            </div>
           
-              <div id="collapseTwo" class="collapse" aria-labelledby="authorinfo" data-parent="#aboutcard">
-                <div class="card-body">
-                  <table class="table table-bordered table-striped text-center">
-                    <thead align="center">Author: Soo Kok Leong</thead>
-                    <tr>
-                      <td colspan="2" align="center"><img width="100" height="100" src="https://cdn.discordapp.com/avatars/432384295450050560/0ed9aa6ca18236ad006bd9bc535e4e46.png"></td>
+            <div id="collapseTwo" class="collapse" aria-labelledby="authorinfo" data-parent="#aboutcard">
+              <div class="card-body">
+                <table class="table table-bordered table-striped text-center">
+                  <thead align="center">Author: Soo Kok Leong</thead>
+                  <tr>
+                    <td colspan="2" align="center"><img width="100" height="100" src="https://cdn.discordapp.com/avatars/432384295450050560/0ed9aa6ca18236ad006bd9bc535e4e46.png"></td>
+                  </tr>
+                  <tr>
+                      <td align="center"><a href="https://www.linkedin.com/in/soo-kok-leong-a6634842/"><i class="fab fa-linkedin fa-2x"></i> LinkedIn</a></td>
+                      <td align="center"><a href="https://discordapp.com/channels/432384295450050560/"><i class="fab fa-discord fa-2x"></i> Discord</a></td>
                     </tr>
-                    <tr>
-                        <td align="center"><a href="https://www.linkedin.com/in/soo-kok-leong-a6634842/"><i class="fab fa-linkedin fa-2x"></i> LinkedIn</a></td>
-                        <td align="center"><a href="https://discordapp.com/channels/432384295450050560/"><i class="fab fa-discord fa-2x"></i> Discord</a></td>
-                      </tr>
-                  </table>
-                </div>
+                </table>
               </div>
             </div>
+          </div>
         </div>
       </div>
     </div>
