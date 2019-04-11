@@ -10,6 +10,10 @@
   <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.8.0/Chart.js"></script>
   <script defer src="https://use.fontawesome.com/releases/v5.8.1/js/all.js" integrity="sha384-g5uSoOSBd7KkhAMlnQILrecXvzst9TdC09/VM+pjDTCM+1il8RHz5fKANTFFb+gQ" crossorigin="anonymous"></script>
+  <script type="text/javascript" src="https://cdn.jsdelivr.net/momentjs/latest/moment.min.js"></script>
+  <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.min.js"></script>
+  <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.css" />
+
   <script>
 
     function humanRead(value){
@@ -58,6 +62,45 @@
       var mydata = [data.Online,data.Offline,data.Miss + data.NoStatus];
 
       var ctx = document.getElementById('myChart').getContext('2d');
+      var myDoughnutChart = new Chart(ctx, {
+        type: 'doughnut',
+        data: {
+          labels: ["Online", "Offline", "Others"],
+          datasets: [
+            {
+              label: "Node status (minutes)",
+              backgroundColor: ["lawngreen", "Red","Orange"],
+              data: mydata
+            }
+          ]
+        },
+        options: {
+          title: {
+            display: true,
+            text: 'Node staking status (minutes)'
+          },
+          circumference: Math.PI,
+          rotation: -Math.PI,
+          animation: {
+            animateScale: false
+          }	
+        }
+      });
+    }
+
+    var pastdate;
+
+    function buildPastChart(data){
+
+      $("#txtPastOn").html(humanRead(data.Online) + " (" + ((data.Online / data.Est)*100).toFixed(4)  + "%)");
+      $("#txtPastOff").html(humanRead(data.Offline) + " (" + ((data.Offline / data.Est)*100).toFixed(4) + "%)");
+      $("#txtPastOth").html(humanRead(data.Miss + data.NoStatus) + " (" + (((data.Miss + data.NoStatus)/data.Est)*100).toFixed(4) + "%)");
+      $("#pastprogress").css("width", ((data.Est / 1440)*100).toFixed(2) + "%");
+      $("#pastDay").html(pastdate.format("YYYY-MM-DD"));
+      $("#pastprogress").html(((data.Est / 1440)*100).toFixed(2) + "%");
+      var mydata = [data.Online,data.Offline,data.Miss + data.NoStatus];
+
+      var ctx = document.getElementById('myPastChart').getContext('2d');
       var myDoughnutChart = new Chart(ctx, {
         type: 'doughnut',
         data: {
@@ -166,7 +209,62 @@
         </div>
       </div>
       <div id="history" class="container tab-pane fade"><br>
-        <p>Past data to display here.</p>
+        <div id="reportrange" style="background: #fff; cursor: pointer; padding: 5px 10px; border: 1px solid #ccc; width: 100%">
+          <i class="fa fa-calendar-alt"></i>&nbsp;<input type="text" name="pastday" readonly />
+        </div>
+
+        <script>
+        $(function() {
+          $('input[name="pastday"]').daterangepicker({
+            singleDatePicker: true,
+            showDropdowns: true,
+            startDate: moment().subtract(1, 'days'),
+            endDate: moment().subtract(1, 'days')
+          }, function(start, end, label) {
+            pastdate=start;
+            var uri = "data/stat_" + start.format("YYYY_MM_DD") + ".json";
+            clearCanvas("myPastChart", "Loading Data.");
+            downloadData(uri, buildPastChart);
+          });
+        });
+        </script>
+        
+        <div class="row">
+            <div class="col-sm">
+              <canvas id="myPastChart" height="225"></canvas>
+            </div>
+          </div>
+          <div class="row justify-content-center">
+              <i class="far fa-calendar-alt pt-1"></i> <code class="text-dark" id="pastDay">no data.</code>
+          </div>
+          <div class="row">
+            <div class="col-sm">
+              <div class="progress" style="height:20px">
+                <div class="progress-bar" id="pastprogress" style="width:0%;height:20px">no data.</div>
+              </div>
+            </div>
+          </div>
+          <div class="row justify-content-center pt-1">
+              <div class="bg-success text-white text-center pr-2 pl-2 small" id="txtPastOn" style="height:20px">no data.</div>
+              <div class="bg-danger text-white text-center pr-2 pl-2 small" id="txtPastOff" style="height:20px">no data.</div>
+              <div class="bg-warning text-white text-center pr-2 pl-2 small" id="txtPastOth" style="height:20px">no data.</div>
+          </div>
+          
+          <div class="row pt-1">
+              <table class="table table-sm table-hover" id="logs">
+                <thead class="thead-dark">
+                  <tr>
+                    <th>Time</th>
+                    <th>Event</th>
+                    <th>Range</th>
+                  </tr>
+                </thead>
+                <tbody id="lbody">
+                </tbody>
+              </table>
+          </div>
+        </div>
+
       </div>
       <div id="about" class="container tab-pane fade"><br>
         <div id="aboutcard">
