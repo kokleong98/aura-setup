@@ -35,6 +35,14 @@ do
       return ret;
     }
 
+    function addCounter(value, statusType)
+    {
+      if(statusType == "0") offline=offline + value
+      else if(statusType == "1") online=online + value
+      else if(statusType == "2") miss=miss + value
+      else if(statusType == "") nostat=nostat + value
+    }
+
     function defaultIfEmpty(data, defaultValue, ret)
     {
       if (length(data) > 0) return data;
@@ -55,7 +63,6 @@ do
       {
         mindate=toDatetime(recs[NR, "t"]);
         maxdate=toDatetime(recs[NR, "t"]);
-        curtime=toDatetime(recs[NR, "t"]);
       }
       else
       {
@@ -66,17 +73,14 @@ do
       }
       if(recs[NR, "s"] == "0")
       {
-        offline=1 + offline
         curstat="0"
       }
       else if(recs[NR, "s"] == "1")
       {
-        online=1 + online
         curstat="1"
       }
       else
       {
-        miss=1 + miss
         curstat=""
       }
 
@@ -85,13 +89,35 @@ do
         laststat=curstat;
         lasttime=toDatetime(recs[NR, "t"]);
       }
+      else
+      {
+        gap=((toDatetime(recs[NR, "t"]) - toDatetime(recs[NR-1, "t"])) / 60);
+        if(gap > 1)
+        {
+          if(length(json) > 0) json=json ","
+          endtime=(toDatetime(recs[NR-1, "t"]))
+          duration=(endtime -lasttime)/60
+          json=json strftime("\n{\"start\":\"%H:%M\"", lasttime) "," strftime("\"end\":\"%H:%M\"", endtime) ",\"span\":" duration+1 ",\"stat\":\"" laststat "\"}"
+          addCounter(duration+1, laststat)
+
+          if(length(json) > 0) json=json ","
+          endtime=(toDatetime(recs[NR, "t"])-60)
+          duration=(endtime -lasttime)/60
+          json=json strftime("\n{\"start\":\"%H:%M\"", (toDatetime(recs[NR-1, "t"])+60)) "," strftime("\"end\":\"%H:%M\"", endtime) ",\"span\":" gap-1 ",\"stat\":\"" "2" "\"}"
+          addCounter(gap-1, "2")
+
+          laststat=curstat;
+          lasttime=toDatetime(recs[NR, "t"]);
+        }
+      }
 
       if (laststat != curstat)
       {
         if(length(json) > 0) json=json ","
         endtime=(toDatetime(recs[NR, "t"])-60)
         duration=(endtime -lasttime)/60
-        json=json strftime("{\"start\":\"%H:%M\"", lasttime) "," strftime("\"end\":\"%H:%M\"", endtime) ",\"span\":" duration+1 ",\"stat\":\"" laststat "\"}"
+        json=json strftime("\n{\"start\":\"%H:%M\"", lasttime) "," strftime("\"end\":\"%H:%M\"", endtime) ",\"span\":" duration+1 ",\"stat\":\"" laststat "\"}"
+        addCounter(duration+1, laststat)
         laststat=curstat;
         lasttime=toDatetime(recs[NR, "t"]);
       }
@@ -103,7 +129,8 @@ do
         if(length(json) > 0) json=json ","
         endtime=(toDatetime(recs[totalrow, "t"]))
         duration=(endtime -lasttime)/60
-        json=json strftime("{\"start\":\"%H:%M\"", lasttime) "," strftime("\"end\":\"%H:%M\"", endtime) ",\"span\":" duration+1 ",\"stat\":\"" laststat "\"}"
+        json=json strftime("\n{\"start\":\"%H:%M\"", lasttime) "," strftime("\"end\":\"%H:%M\"", endtime) ",\"span\":" duration+1 ",\"stat\":\"" laststat "\"}"
+        addCounter(duration+1, laststat)
       }
 
       diff=maxdate - mindate + 60;
@@ -112,9 +139,10 @@ do
       online=defaultIfEmpty(online, 0)
       offline=defaultIfEmpty(offline, 0)
       miss=defaultIfEmpty(miss, 0)
+      nostat=defaultIfEmpty(nostat, 0)
       cnt=defaultIfEmpty(cnt, 0)
 
-      printf "{\"Date\":%s,\"Online\":%s,\"Offline\":%s,\"NoStatus\":%s,\"Est\":%s,\"Miss\":%s", strftime("%Y-%m-%dT00:00:00.000Z", endtime), online, offline, miss, cnt, (cnt -online - offline - miss)
+      printf "{\"Date\":%s,\"Online\":%s,\"Offline\":%s,\"NoStatus\":%s,\"Est\":%s,\"Miss\":%s", strftime("%Y-%m-%dT00:00:00.000Z", endtime), online, offline, nostat, cnt, miss
       printf ",\"History\":[%s]}", json
     }' "$DIR/stats/$curdate.txt"
     )
