@@ -22,6 +22,22 @@
       else return (value / 1440).toFixed(2) + " day(s)";
     }
 
+    function faildata(jqXHR, textStatus, errorThrown) {
+      if(jqXHR.status == 404){
+        $("#msgModal").modal();
+      }
+      
+    }
+
+    function changeDate(value)
+    {
+      var e = $('#pastday').data('daterangepicker');
+      var newdate=pastdate.add(value, 'days');
+      e.setStartDate(newdate);
+      e.setEndDate(newdate);
+      eventDateClick(newdate, newdate);
+    }
+
     function clearCanvas(id, msg){
       var canvas = document.getElementById(id);
       var ctx = canvas.getContext("2d");
@@ -31,8 +47,11 @@
       if(msg.length > 0) ctx.fillText(msg, canvas.width / 2, canvas.height / 2);
     }
 
-    function downloadData(uri, func){
-      return $.getJSON(uri).then(func);
+    function downloadData(uri, func, failfunc){
+      return $.getJSON(uri).then(func)
+      //.done(function() { alert('getJSON request succeeded!'); })
+      .fail(failfunc)
+      ;
     }
 
     function buildChart(data){
@@ -113,7 +132,7 @@
       }
     }
 
-    var pastdate;
+    var pastdate = moment().subtract(1, 'days');
 
     function buildPastChart(data){
 
@@ -162,7 +181,7 @@
       date = date.length > 2 ? date.slice(1) : date;
       var uri = "data/stat_" + d.getUTCFullYear() + "_" + mo + "_" + date + ".json";
       clearCanvas("myChart", "Loading Data.");
-      downloadData(uri, buildChart);
+      downloadData(uri, buildChart, faildata);
     }
 
     $(document).ready(function(){
@@ -191,9 +210,25 @@
       </li>
       <li class="nav-item bg-dark navbar-dark">
         <a class="nav-link" data-toggle="tab" href="#about"><i class="fas fa-code"></i> About</a>
-      </li>    
+      </li>
     </ul>
   </nav>
+
+  <!-- Modal -->
+  <div class="modal fade" id="msgModal" tabindex="-1" role="dialog" aria-labelledby="msgModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-sm" role="document">
+      <div class="modal-content">
+        <div class="modal-header bg-dark"><span class="text-white">Information</span></div>
+        <div class="modal-body">
+          <i class="far fa-times-circle fa-2x" style="color: red"></i> No data found.
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+        </div>
+      </div>
+    </div>
+  </div>
+  
 
   <div class="tab-content">
       <div id="status" class="container tab-pane active">
@@ -240,26 +275,33 @@
       <div id="history" class="container tab-pane fade"><br>
         <div class="container-fluid">
 
-          <div id="reportrange" style="background: #fff; cursor: pointer; padding: 5px 10px; border: 1px solid #ccc; width: 100%">
-              <i class="fa fa-calendar-alt"></i>&nbsp;<input type="text" name="pastday" readonly />
+          <div id="reportrange" style="background: #fff; cursor: pointer; padding: 5px 10px; border: 1px solid #ccc;">
+            <i class="fa fa-calendar-alt"></i>&nbsp;
+            <button class="btn-primary" onclick="changeDate(-1);" ><i class='fas fa-caret-left'></i></button> 
+            <input type="text" id="pastday" name="pastday" readonly />
+            <button class="btn-primary" onclick="changeDate(1);" ><i class='fas fa-caret-right'></i></button> 
           </div>
     
           <script>
-          $(function() {
-            $('input[name="pastday"]').daterangepicker({
-              singleDatePicker: true,
-              showDropdowns: true,
-              startDate: moment().subtract(1, 'days'),
-              endDate: moment().subtract(1, 'days')
-            }, function(start, end, label) {
+            function eventDateClick(start, end, label) {
               pastdate=start;
               var uri = "data/stat_" + start.format("YYYY_MM_DD") + ".json";
               clearCanvas("myPastChart", "Loading Data.");
-              downloadData(uri, buildPastChart);
+              downloadData(uri, buildPastChart, faildata);
+            }
+
+            $(function() {
+              $('input[name="pastday"]').daterangepicker({
+                singleDatePicker: true,
+                showDropdowns: true,
+                startDate: moment().subtract(1, 'days'),
+                endDate: moment().subtract(1, 'days'),
+                autoApply: true,
+                autoUpdateInput: true
+              }, eventDateClick);
             });
-          });
-          </script>
-            
+
+          </script>            
             <div class="row">
               <div class="col-sm">
                 <canvas id="myPastChart" height="225"></canvas>
