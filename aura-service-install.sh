@@ -342,7 +342,7 @@ logStatistics()
   if [ ! -d "\${DIR}/web/data/" ]; then
     mkdir -p "\${DIR}/web/data/"
   fi
-  "\${DIR}/node_stats_days.sh" 1 "\$(date -u +%Y-%m-%d)" json "\${DIR}/web/data/"
+  "\${DIR}/node-json.sh" 1 "\$(date -u +%Y-%m-%d)" "\${DIR}/web/data/"
 }
 
 startAura()
