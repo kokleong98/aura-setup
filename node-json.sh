@@ -15,6 +15,12 @@ else
   tilldate="$(date -d "$2" +%Y-%m-%d)"
 fi
 
+if [ -z "$3" ]; then
+  destpath="$DIR/web/data"
+else
+  destpath="$3"
+fi
+
 newline='
 '
 
@@ -142,16 +148,10 @@ do
       nostat=defaultIfEmpty(nostat, 0)
       cnt=defaultIfEmpty(cnt, 0)
 
-      printf "{\"Date\":%s,\"Online\":%s,\"Offline\":%s,\"NoStatus\":%s,\"Est\":%s,\"Miss\":%s", strftime("%Y-%m-%dT00:00:00.000Z", endtime), online, offline, nostat, cnt, miss
+      printf "{\"Date\":\"%s\",\"Online\":%s,\"Offline\":%s,\"NoStatus\":%s,\"Est\":%s,\"Miss\":%s", strftime("%Y-%m-%dT00:00:00.000Z", endtime), online, offline, nostat, cnt, miss
       printf ",\"History\":[%s]}", json
     }' "$DIR/stats/$curdate.txt"
     )
 
-    if [ -z "$result" ]; then
-      result="$line"
-    else
-      result="$result$newline$line"
-    fi
+    cat > "$destpath/stat_$(date -d "$tilldate +$((val * -1)) days" +%Y_%m_%d).json" <<< $line
 done
-
-echo "$result"
