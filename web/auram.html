@@ -17,7 +17,9 @@
   <script>
 
     function humanRead(value){
-      return (value < 60) ? (value + " min(s)") : (value / 60).toFixed(2) + " hour(s)";
+      if (value < 60) return value + " min(s)";
+      else if (value < 1440) return (value / 60).toFixed(2) + " hour(s)";
+      else return (value / 1440).toFixed(2) + " day(s)";
     }
 
     function clearCanvas(id, msg){
@@ -27,18 +29,6 @@
       ctx.font = "30px Arial";
       ctx.textAlign = "center";
       if(msg.length > 0) ctx.fillText(msg, canvas.width / 2, canvas.height / 2);
-    }
-
-    function insertTableRow(id, index, result){
-      var table = document.getElementById(id);
-      var row = table.insertRow(index);
-      var cell1 = row.insertCell(0);
-      var cell2 = row.insertCell(1);
-      var cell3 = row.insertCell(2);
-      var d = new Date(result.Date);
-      cell1.innerHTML = d.getUTCFullYear() + "-" + (d.getUTCMonth()+1) + "-" + d.getUTCDate();
-      cell2.innerHTML = result.Online;
-      cell2.innerHTML = result.Offline;
     }
 
     function downloadData(uri, func){
@@ -59,6 +49,8 @@
       $("#dayprogress").css("width", ((data.Est / 1440)*100).toFixed(2) + "%");
       $("#curDay").html(today);
       $("#dayprogress").html(((data.Est / 1440)*100).toFixed(2) + "%");
+
+      buildActivity('logs', data.History);
       var mydata = [data.Online,data.Offline,data.Miss + data.NoStatus];
 
       var ctx = document.getElementById('myChart').getContext('2d');
@@ -87,6 +79,39 @@
         }
       });
     }
+    function buildActivity(tbl, data)
+    {
+      var pattern = '#' + tbl + ' > tbody > tr';
+      var target = document.getElementById(tbl).getElementsByTagName('tbody')[0];;
+      var rows = $(pattern);
+
+      if (rows.length > data.length) {
+        for(i = 0; i < rows.length - data.length; i++)
+          target.deleteRow(-1);
+      }
+      else if (rows.length < data.length) {
+        for(i = 0; i < data.length - rows.length; i++){
+          var row = target.insertRow(-1);
+          row.insertCell(0);
+          row.insertCell(1);
+          row.insertCell(2);
+        }
+      }
+      var rows = $(pattern);
+      for(i=data.length-1; i >= 0; i--)
+      {
+        var col1 = data[i].start + "-" + data[i].end;
+        var col2 = "";
+        var col3 = humanRead(data[i].span);
+        if(data[i].stat == '0') col2 = '<p class="bg-danger text-white text-center">Offline</p>';
+        else if(data[i].stat == '1') col2 = '<p class="bg-success text-white text-center">Online</p>';
+        else if(data[i].stat == '2') col2 = '<p class="bg-warning text-white text-center">Miss</p>';
+        else if(data[i].stat == '') col2 = '<p class="bg-warning text-white text-center">No Status</p>';
+        rows[data.length-1-i].cells[0].innerHTML=col1;
+        rows[data.length-1-i].cells[1].innerHTML=col2;
+        rows[data.length-1-i].cells[2].innerHTML=col3;
+      }
+    }
 
     var pastdate;
 
@@ -98,6 +123,8 @@
       $("#pastprogress").css("width", ((data.Est / 1440)*100).toFixed(2) + "%");
       $("#pastDay").html(pastdate.format("YYYY-MM-DD"));
       $("#pastprogress").html(((data.Est / 1440)*100).toFixed(2) + "%");
+      buildActivity('pastlogs', data.History);
+
       var mydata = [data.Online,data.Offline,data.Miss + data.NoStatus];
 
       var ctx = document.getElementById('myPastChart').getContext('2d');
@@ -140,7 +167,6 @@
 
     $(document).ready(function(){
       clearCanvas("myChart", "No Data.");
-      handleChartData();
       setInterval(handleChartData, 60000);
     });
   </script>
@@ -199,13 +225,16 @@
                   <tr>
                     <th>Time</th>
                     <th>Event</th>
-                    <th>Range</th>
+                    <th>Span</th>
                   </tr>
                 </thead>
                 <tbody id="lbody">
                 </tbody>
               </table>
           </div>
+          <script>
+            handleChartData();
+          </script>
         </div>
       </div>
       <div id="history" class="container tab-pane fade"><br>
@@ -254,15 +283,15 @@
             </div>
               
             <div class="row pt-1">
-              <table class="table table-sm table-hover" id="logs">
+              <table class="table table-sm table-hover" id="pastlogs">
                 <thead class="thead-dark">
                   <tr>
                     <th>Time</th>
                     <th>Event</th>
-                    <th>Range</th>
+                    <th>Span</th>
                   </tr>
                 </thead>
-                <tbody id="lbody">
+                <tbody id="pastlbody">
                 </tbody>
               </table>
             </div>
